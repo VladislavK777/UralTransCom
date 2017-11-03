@@ -1,93 +1,83 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 
-public class GetNumberOfStationImpl extends VaribalesForRestAPI implements GetNumberOfStation {
+/*
+*
+* Класс получения Кодов станций
+*
+* @author Vladislav Klochkov
+* @version 1.0
+* @create 25.10.2017
+*
+*/
 
-    private static final String url = "jdbc:mysql://localhost:3306/restapi?autoReconnect=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private static final String user = "root";
-    private static final String pass = "root";
+public class GetNumberOfStationImpl extends ConnectionToDBMySQL implements GetNumberOfStation {
 
-    private static Connection con;
-    private static Statement stmt;
-    private static ResultSet rs;
+    // Подключаем логгер
+    private static Logger logger = LoggerFactory.getLogger(GetNumberOfStationImpl.class);
+
+    private static Connection connection;
+    private static PreparedStatement preparedStatement;
+    private static ResultSet resultSet;
 
     @Override
     public String codeOfStation(String name) {
-        String query = "select s.station_key from stations s where s.station_name = ?";
-        /*try {
-            Call<ResponseBody> result = api.execSomeMethod2(name, "get_station2");
-            Response response = result.execute();
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(((ResponseBody) response.body()).bytes());
-            InputStreamReader inputStreamReader = new InputStreamReader(byteArrayInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String readed;
-            while ((readed = bufferedReader.readLine()) != null) {
-                split = readed.split(" ");
-                if (split[1].trim().equals(name)) {
-                    return split[0].trim();
-                }
-                try (FileWriter fileWriter = new FileWriter(new File("c:\\Users\\Vladislav.Klochkov\\Desktop\\JavaTest\\codeofstations.txt"), true)) {
-
-                    fileWriter.write(split[0] + " ");
-                    fileWriter.write(split[1] + " ");
-                    fileWriter.write(split[2] + " ");
-                    fileWriter.write(split[3] + " ");
-                    fileWriter.write(split[4] + "\r\n");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-        String station = new String();
-        PreparedStatement pstmt = null;
+        // Переменная, Код станции
+        String stationCode = new String();
         try {
-            // opening database connection to MySQL server
-            con = DriverManager.getConnection(url, user, pass);
+            // Открываем соединение с БД
+            connection = DriverManager.getConnection(getUrl(), getUser(), getPass());
 
-            // getting Statement object to execute query
-            stmt = con.createStatement();
-
-            pstmt = con.prepareStatement("select s.station_key from stations s where s.station_name = ?");
-// Определяем значения параметров
-            pstmt.setString(1, name);
-
-            // executing SELECT query
-            rs = pstmt.executeQuery();
+            // Подготавливаем запрос
+            preparedStatement = connection.prepareStatement("select s.station_key from stations s where s.station_name = ?");
 
 
-            while (rs.next()) {
-                station = rs.getString(1);
-                //System.out.println("Total number of books in the table : " + station);
+            // Определяем значения параметров
+            preparedStatement.setString(1, name);
+
+            // Выполняем запрос
+            resultSet = preparedStatement.executeQuery();
+
+            // Вычитываем полученное значение
+            while (resultSet.next()) {
+                stationCode = resultSet.getString(1);
             }
-
         } catch (SQLException sqlEx) {
-            sqlEx.printStackTrace();
+            logger.error("Ошибка запроса " + preparedStatement);
         } finally {
-            //close connection ,stmt and resultset here
             try {
-                con.close();
-            } catch (SQLException se) { /*can't do anything */ }
+                connection.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
             try {
-                stmt.close();
-            } catch (SQLException se) { /*can't do anything */ }
+                resultSet.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
             try {
-                rs.close();
-            } catch (SQLException se) { /*can't do anything */ }
-            try {
-                pstmt.close();
-            } catch (SQLException se) { /*can't do anything */ }
+                preparedStatement.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
         }
-
-        return station;
+        return stationCode;
     }
 
+    // Метод выстроения строки
     @Override
     public String getStringQueryOfRoute(String nameOfStation1, String nameOfStation2) {
         StringBuilder stringBuilder = new StringBuilder();
 
+        // Получаем код станции назначения вагона
         stringBuilder.append(codeOfStation(nameOfStation1));
-        stringBuilder.append(";");
-        stringBuilder.append(codeOfStation(nameOfStation2));
 
+        stringBuilder.append(";");
+
+        // Получаем код станции отправления маршрута
+        stringBuilder.append(codeOfStation(nameOfStation2));
         return stringBuilder.toString();
     }
 

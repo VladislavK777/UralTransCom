@@ -1,6 +1,5 @@
 import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -10,14 +9,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 /*
 *
-* Класс получения списка маршрутов
+* Класс получения списка вагонов
 *
 * @author Vladislav Klochkov
 * @version 1.0
@@ -25,16 +21,16 @@ import java.util.List;
 *
 */
 
-public class GetBasicListOfRoutes {
+public class GetListOfWagons {
 
     // Подключаем логгер
-    private static Logger logger = LoggerFactory.getLogger(GetBasicListOfRoutes.class);
+    private static Logger logger = LoggerFactory.getLogger(GetListOfWagons.class);
 
-    // Основаная мапа, куда записываем все маршруты
-    private HashMap<Integer, List<Object>> mapOfRoutes = new HashMap<>();
+    // Основаная мапа, куда записываем все вагоны
+    private HashMap<Integer, String> mapOfWagons = new HashMap<>();
 
     // Переменные для работы с файлами
-    private File file = new File("C:\\Users\\Vladislav.Klochkov\\Desktop\\test.xlsx");
+    private File file = new File("C:\\Users\\Vladislav.Klochkov\\Desktop\\wagons.xlsx");
     private FileInputStream fileInputStream;
     private FileOutputStream fileOutputStream;
 
@@ -42,12 +38,12 @@ public class GetBasicListOfRoutes {
     private XSSFWorkbook xssfWorkbook;
     private XSSFSheet sheet;
 
-    // Конструктор заполняет основную мапу
-    public GetBasicListOfRoutes() {
-        fillMapOfRoutes();
+    public GetListOfWagons() {
+        fillMapOfWagons();
     }
 
-    public void fillMapOfRoutes() {
+
+    private void fillMapOfWagons() {
 
         // Получаем файл формата xls
         try {
@@ -56,17 +52,19 @@ public class GetBasicListOfRoutes {
 
             // Заполняем мапу данными
             sheet = xssfWorkbook.getSheetAt(0);
-            Iterator<Row> it = sheet.iterator();
             int i = 0;
-            while (it.hasNext()) {
-                Row row = it.next();
-                Iterator<Cell> cells = row.iterator();
-                List<Object> tempList = new ArrayList<>();
-                while (cells.hasNext()) {
-                    Cell cell = cells.next();
-                    tempList.add(cell);
+            for (int j = 5; j < sheet.getLastRowNum() + 1; j++) {
+                StringBuilder stringStationAndWagon = new StringBuilder();
+                XSSFRow row = sheet.getRow(j);
+                for (int c = 0; c < 8; c = c + 7) {
+                    stringStationAndWagon.append(row.getCell(c).getStringCellValue());
+                    if (c == 7) {
+                        stringStationAndWagon.append("");
+                    } else {
+                        stringStationAndWagon.append(", ");
+                    }
                 }
-                mapOfRoutes.put(i, tempList);
+                mapOfWagons.put(i, stringStationAndWagon.toString());
                 i++;
             }
         } catch (IOException e) {
@@ -76,12 +74,12 @@ public class GetBasicListOfRoutes {
         }
     }
 
-    public HashMap<Integer, List<Object>> getMapOfRoutes() {
-        return mapOfRoutes;
+    public HashMap<Integer, String> getMapOfWagons() {
+        return mapOfWagons;
     }
 
-    public void setMapOfRoutes(HashMap<Integer, List<Object>> mapOfRoutes) {
-        this.mapOfRoutes = mapOfRoutes;
+    public void setMapOfWagons(HashMap<Integer, String> mapOfWagons) {
+        this.mapOfWagons = mapOfWagons;
     }
 
     public File getFile() {

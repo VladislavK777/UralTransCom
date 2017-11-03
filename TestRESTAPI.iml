@@ -12,9 +12,15 @@
     <orderEntry type="library" name="okhttp-3.9.0" level="application" />
     <orderEntry type="library" name="okio-1.13.0" level="application" />
     <orderEntry type="library" name="converter-gson-2.3.0" level="application" />
-    <orderEntry type="library" name="poi-3.16" level="application" />
-    <orderEntry type="library" name="poi-ooxml-3.16" level="application" />
-    <orderEntry type="library" name="poi-ooxml-schemas-3.17" level="application" />
     <orderEntry type="library" name="mysql-connector-java-6.0.6" level="application" />
+    <orderEntry type="library" name="poi-ooxml-schemas-3.17" level="application" />
+    <orderEntry type="library" name="xmlbeans-2.6.0" level="application" />
+    <orderEntry type="library" name="stax-api-1.0-2" level="application" />
+    <orderEntry type="library" name="commons-codec-1.11" level="application" />
+    <orderEntry type="library" name="poi-ooxml-3.17" level="application" />
+    <orderEntry type="library" name="poi-3.17" level="application" />
+    <orderEntry type="library" name="commons-collections4-4.1" level="application" />
+    <orderEntry type="library" name="slf4j-api-1.7.25" level="application" />
+    <orderEntry type="library" name="slf4j-simple-1.7.25" level="application" />
   </component>
 </module>
