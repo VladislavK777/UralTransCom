@@ -1,0 +1,147 @@
+
+/*
+*
+* Дополнительный класс для получения названия жд
+*
+* @author Vladislav Klochkov
+* @version 1.0
+* @create 03.11.2017
+*
+*/
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.*;
+
+public class AdditionalClassForGetRoadOfStations extends ConnectionToDBMySQL {
+
+    // Подключаем логгер
+    private static Logger logger = LoggerFactory.getLogger(AdditionalClassForGetRoadOfStations.class);
+
+    private static Connection connection;
+    private static PreparedStatement preparedStatement;
+    private static ResultSet resultSet;
+
+    private GetNumberOfStationImpl getNumberOfStation = new GetNumberOfStationImpl();
+
+    // Метод вставки записи в БД
+    public void insertDistanceToDB(String nameOfStationStart, String nameOfStationEnd, String distance) {
+        try {
+            // Открываем соединение с БД
+            connection = DriverManager.getConnection(getUrl(), getUser(), getPass());
+
+            // Подготавливаем запрос
+            preparedStatement = connection.prepareStatement("insert into distancebetweentwostations (station_key_start, station_name_start, road_station_start, station_key_end, station_name_end, road_station_end, distance) values (?, ?, ?, ?, ?, ?, ?)");
+
+            // Заполняем параметры
+            preparedStatement.setString(1, getNumberOfStation.codeOfStation(nameOfStationStart));
+            preparedStatement.setString(2, nameOfStationStart);
+            preparedStatement.setString(3, getNameOfRoadOfStationStart(nameOfStationStart));
+            preparedStatement.setString(4, getNumberOfStation.codeOfStation(nameOfStationEnd));
+            preparedStatement.setString(5, nameOfStationEnd);
+            preparedStatement.setString(6, getNameOfRoadOfStationEnd(nameOfStationEnd));
+            preparedStatement.setString(7, distance);
+
+            // Выполняем запрос
+            preparedStatement.executeUpdate();
+        } catch (SQLException sqlEx) {
+            logger.error("Ошибка запроса INSERT " + sqlEx.getMessage());
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
+            try {
+                preparedStatement.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
+        }
+    }
+
+    // Метод получения имени жд для станции старта
+    public String getNameOfRoadOfStationStart(String nameStationStart) {
+        String nameRoad = new String();
+        try {
+            // Открываем соединение с БД
+            connection = DriverManager.getConnection(getUrl(), getUser(), getPass());
+
+            // Подготавливаем запрос
+            preparedStatement = connection.prepareStatement("select d.road_station_start from distancebetweentwostations d where d.station_key_start = ?");
+
+            // Определяем значения параметров
+            preparedStatement.setString(1, getNumberOfStation.codeOfStation(nameStationStart));
+
+            // Выполняем запрос
+            resultSet = preparedStatement.executeQuery();
+
+            // Вычитываем полученное значение
+            while (resultSet.next()) {
+                nameRoad = resultSet.getString(1);
+            }
+        } catch (SQLException sqlEx) {
+            logger.error("Ошибка запроса " + preparedStatement);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
+            try {
+                preparedStatement.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
+            try {
+                resultSet.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
+        }
+        return nameRoad;
+    }
+
+    // Метод получения имени жд для станции конца
+    public String getNameOfRoadOfStationEnd(String nameStationEnd) {
+        String nameRoad = new String();
+        try {
+            // Открываем соединение с БД
+            connection = DriverManager.getConnection(getUrl(), getUser(), getPass());
+
+            // Подготавливаем запрос
+            preparedStatement = connection.prepareStatement("select d.road_station_end from distancebetweentwostations d where d.station_key_end = ?");
+
+            // Определяем значения параметров
+            preparedStatement.setString(1, getNumberOfStation.codeOfStation(nameStationEnd));
+
+            // Выполняем запрос
+            resultSet = preparedStatement.executeQuery();
+
+            // Вычитываем полученное значение
+            while (resultSet.next()) {
+                nameRoad = resultSet.getString(1);
+            }
+        } catch (SQLException sqlEx) {
+            logger.error("Ошибка запроса " + preparedStatement);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
+            try {
+                preparedStatement.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
+            try {
+                resultSet.close();
+            } catch (SQLException se) {
+                logger.error("Ошибка закрытия соединения");
+            }
+        }
+        return nameRoad;
+    }
+}

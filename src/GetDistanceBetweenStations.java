@@ -1,4 +1,4 @@
 public interface GetDistanceBetweenStations {
-    String getDistanceBetweenStations(String nameOfStation1, String nameOfStation2);
+    String getDistanceBetweenStations(String nameOfStationStart, String nameOfStationEnd);
 
 }

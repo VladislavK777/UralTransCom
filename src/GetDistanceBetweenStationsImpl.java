@@ -25,11 +25,12 @@ public class GetDistanceBetweenStationsImpl extends VaribalesForRestAPI implemen
     private static Connection connection;
     private static PreparedStatement preparedStatement;
     private static ResultSet resultSet;
+    private AdditionalClassForGetRoadOfStations additionalClassForGetRoadOfStations = new AdditionalClassForGetRoadOfStations();
 
-    GetNumberOfStationImpl getNumberOfStationImpl = new GetNumberOfStationImpl();
+    private GetNumberOfStationImpl getNumberOfStationImpl = new GetNumberOfStationImpl();
 
     @Override
-    public String getDistanceBetweenStations(String nameOfStation1, String nameOfStation2) {
+    public String getDistanceBetweenStations(String nameOfStationStart, String nameOfStationEnd) {
         String distance = new String();
         try {
             // Открываем соединение с БД
@@ -38,10 +39,9 @@ public class GetDistanceBetweenStationsImpl extends VaribalesForRestAPI implemen
             // Подготавливаем запрос
             preparedStatement = connection.prepareStatement("select d.distance from distancebetweentwostations d where d.station_name_start = ? and d.station_name_end = ?");
 
-
             // Определяем значения параметров
-            preparedStatement.setString(1, nameOfStation1);
-            preparedStatement.setString(2, nameOfStation2);
+            preparedStatement.setString(1, nameOfStationStart);
+            preparedStatement.setString(2, nameOfStationEnd);
 
             // Выполняем запрос
             resultSet = preparedStatement.executeQuery();
@@ -51,26 +51,18 @@ public class GetDistanceBetweenStationsImpl extends VaribalesForRestAPI implemen
                 distance = resultSet.getString(1);
             }
 
+            // Если в базе нет расстояния, то берем с веб-сервиса и добавляем в базу
             if (distance.isEmpty()) {
-                String route = getNumberOfStationImpl.getStringQueryOfRoute(nameOfStation1, nameOfStation2);
-                System.out.println("С портала " + route);
-                //System.out.println(route + " " + nameOfStation1 + " " + nameOfStation2);
+                String route = getNumberOfStationImpl.getStringQueryOfRoute(nameOfStationStart, nameOfStationEnd);
                 Call<List<SomeResponce>> result = null;
                 try {
                     result = api.execSomeMethod("froute.php", route);
                     distance = result.execute().body().get(0).routes;
-                    preparedStatement = connection.prepareStatement("insert into distancebetweentwostations (station_key_start, station_name_start, station_key_end, station_name_end, distance) values (?, ?, ?, ?, ?)");
-                    preparedStatement.setString(1, getNumberOfStationImpl.codeOfStation(nameOfStation1));
-                    preparedStatement.setString(2, nameOfStation1);
-                    preparedStatement.setString(3, getNumberOfStationImpl.codeOfStation(nameOfStation2));
-                    preparedStatement.setString(4, nameOfStation2);
-                    preparedStatement.setString(5, distance);
-                    preparedStatement.executeUpdate();
+                    additionalClassForGetRoadOfStations.insertDistanceToDB(nameOfStationStart, nameOfStationEnd, distance);
                 } catch (IOException e) {
-                    logger.error("Ошибка получения данных с портала: " + result.request().url());
+                    logger.error("Ошибка получения данных с портала: " + result.request().url() + " " + nameOfStationStart + " " + nameOfStationEnd);
                 }
             }
-
         } catch (SQLException sqlEx) {
             logger.error("Ошибка запроса " + preparedStatement);
         } finally {
@@ -90,9 +82,6 @@ public class GetDistanceBetweenStationsImpl extends VaribalesForRestAPI implemen
                 logger.error("Ошибка закрытия соединения");
             }
         }
-
-        System.out.println(nameOfStation1 + " " + nameOfStation2);
-        System.out.println(distance);
         return distance;
     }
 }

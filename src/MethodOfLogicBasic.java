@@ -25,7 +25,7 @@ public class MethodOfLogicBasic {
         System.out.println(tempMapOfRoutes);
         System.out.println(tempMapOfWagons);
 
-        for (int a = 0; a < countRoutes; a++) {
+        for (int a = 0; a < countCircle; a++) {
 
             // Очищаем массивы
             listOfRoutes.clear();
