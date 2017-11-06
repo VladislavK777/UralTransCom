@@ -19,6 +19,8 @@ import java.util.HashMap;
 * @version 1.0
 * @create 25.10.2017
 *
+* 06.11.2017 - Добавлено внесение в мапу название ЖД, для более детального поиска номера станции
+*
 */
 
 public class GetListOfWagons {
@@ -55,18 +57,31 @@ public class GetListOfWagons {
             int i = 0;
             for (int j = 5; j < sheet.getLastRowNum() + 1; j++) {
                 StringBuilder stringStationAndWagon = new StringBuilder();
-                XSSFRow row = sheet.getRow(j);
-                for (int c = 0; c < 8; c = c + 7) {
-                    stringStationAndWagon.append(row.getCell(c).getStringCellValue());
-                    if (c == 7) {
-                        stringStationAndWagon.append("");
-                    } else {
+                XSSFRow row = sheet.getRow(4);
+                for (int c = 0; c < row.getLastCellNum(); c++) {
+                    if (row.getCell(c).getStringCellValue().equals("Вагон №")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        stringStationAndWagon.append(xssfRow.getCell(c).getStringCellValue());
                         stringStationAndWagon.append(", ");
+                    } else if (row.getCell(c).getStringCellValue().equals("Дорога назначения")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        stringStationAndWagon.append(xssfRow.getCell(c).getStringCellValue());
+                        stringStationAndWagon.append(", ");
+                    } else if (row.getCell(c).getStringCellValue().equals("Ст. назначения")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        stringStationAndWagon.append(xssfRow.getCell(c).getStringCellValue());
                     }
                 }
+                //System.out.println(stringStationAndWagon);
+                /*stringStationAndWagon.append(row.getCell(0).getStringCellValue());
+                stringStationAndWagon.append(", ");
+                stringStationAndWagon.append(row.getCell(7).getStringCellValue());
+                stringStationAndWagon.append(", ");
+                stringStationAndWagon.append(row.getCell(6).getStringCellValue());*/
                 mapOfWagons.put(i, stringStationAndWagon.toString());
                 i++;
             }
+
         } catch (IOException e) {
             logger.error("Ошибка загруки файла");
         } catch (OLE2NotOfficeXmlFileException e1) {

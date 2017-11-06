@@ -11,6 +11,9 @@ import java.sql.*;
 * @version 1.0
 * @create 25.10.2017
 *
+*
+* 06.11.2017 - В метод и запрос добавлен параметр road
+*
 */
 
 public class GetNumberOfStationImpl extends ConnectionToDBMySQL implements GetNumberOfStation {
@@ -23,7 +26,7 @@ public class GetNumberOfStationImpl extends ConnectionToDBMySQL implements GetNu
     private static ResultSet resultSet;
 
     @Override
-    public String codeOfStation(String name) {
+    public String codeOfStation(String name, String road) {
         // Переменная, Код станции
         String stationCode = new String();
         try {
@@ -31,11 +34,12 @@ public class GetNumberOfStationImpl extends ConnectionToDBMySQL implements GetNu
             connection = DriverManager.getConnection(getUrl(), getUser(), getPass());
 
             // Подготавливаем запрос
-            preparedStatement = connection.prepareStatement("select s.station_key from stations s where s.station_name = ?");
+            preparedStatement = connection.prepareStatement("select s.station_key from stations s where s.station_name = ? and s.road = ?");
 
 
             // Определяем значения параметров
             preparedStatement.setString(1, name);
+            preparedStatement.setString(2, road);
 
             // Выполняем запрос
             resultSet = preparedStatement.executeQuery();
@@ -68,16 +72,16 @@ public class GetNumberOfStationImpl extends ConnectionToDBMySQL implements GetNu
 
     // Метод выстроения строки
     @Override
-    public String getStringQueryOfRoute(String nameOfStation1, String nameOfStation2) {
+    public String getStringQueryOfRoute(String nameOfStation1, String roadOfStation1, String nameOfStation2, String roadOfStation2) {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Получаем код станции назначения вагона
-        stringBuilder.append(codeOfStation(nameOfStation1));
+        stringBuilder.append(codeOfStation(nameOfStation1, roadOfStation1));
 
         stringBuilder.append(";");
 
         // Получаем код станции отправления маршрута
-        stringBuilder.append(codeOfStation(nameOfStation2));
+        stringBuilder.append(codeOfStation(nameOfStation2, roadOfStation2));
         return stringBuilder.toString();
     }
 
