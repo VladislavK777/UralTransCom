@@ -12,7 +12,6 @@ public class MethodOfLogicBasic {
     private List<Object> listOfRoutes = new ArrayList();
     private HashSet<String> tempStationDistrict = new HashSet();
 
-
     public void lookingForOptimalMapOfRoute() {
 
         tempMapOfRoutes = getBasicListOfRoutes.getMapOfRoutes();
@@ -153,25 +152,6 @@ public class MethodOfLogicBasic {
             System.out.println("----------------------------------------");
             System.out.println(a + " finalTempMap: " + finalTempMap);
             System.out.println("----------------------------------------");
-        }
-    }
-
-    private static class CompareMapValue implements Comparable {
-        public List<String> list;
-        public Integer i;
-
-        private CompareMapValue(List<String> list, Integer i) {
-            this.list = list;
-            this.i = i;
-        }
-
-        public int compareTo(Object o) {
-            if (o instanceof CompareMapValue) {
-                final int diff = i.intValue() - ((CompareMapValue) o).i.intValue();
-                return diff < 0 ? -1 : (diff > 0 ? 1 : 0);
-            } else {
-                return 0;
-            }
         }
     }
 

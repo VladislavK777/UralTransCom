@@ -1,7 +1,17 @@
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class VaribalesForRestAPI {
+/*
+*
+* Класс переменных для соединения с порталом
+*
+* @author Vladislav Klochkov
+* @version 1.0
+* @create 25.10.2017
+*
+*/
+
+public class VaribaleForRestAPI {
 
     public Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://poisk-vagonov.ru")

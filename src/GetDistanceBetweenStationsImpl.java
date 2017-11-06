@@ -16,7 +16,7 @@ import java.util.List;
 *
 */
 
-public class GetDistanceBetweenStationsImpl extends VaribalesForRestAPI implements GetDistanceBetweenStations {
+public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implements GetDistanceBetweenStations {
 
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetDistanceBetweenStationsImpl.class);

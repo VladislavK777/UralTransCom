@@ -5,6 +5,16 @@ import retrofit2.http.Query;
 
 import java.util.List;
 
+/*
+*
+* Интерфейс реализации REST запросов
+*
+* @author Vladislav Klochkov
+* @version 1.0
+* @create 25.10.2017
+*
+*/
+
 public interface SomeRestApi {
     @GET("/rail_proxy.php")
     Call<List<SomeResponce>> execSomeMethod(@Query("page") String page,
