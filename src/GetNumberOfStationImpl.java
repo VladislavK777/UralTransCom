@@ -49,6 +49,7 @@ public class GetNumberOfStationImpl extends ConnectionToDBMySQL implements GetNu
                 stationCode = resultSet.getString(1);
             }
         } catch (SQLException sqlEx) {
+            sqlEx.printStackTrace();
             logger.error("Ошибка запроса " + preparedStatement);
         } finally {
             try {

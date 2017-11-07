@@ -37,11 +37,13 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
             connection = DriverManager.getConnection(connectionToDBMySQL.getUrl(), connectionToDBMySQL.getUser(), connectionToDBMySQL.getPass());
 
             // Подготавливаем запрос
-            preparedStatement = connection.prepareStatement("select d.distance from distancebetweentwostations d where d.station_key_start = ? and d.station_key_end = ?");
+            preparedStatement = connection.prepareStatement("select d.distance from distancebetweentwostations d where (d.station_name_start = ? and d.road_station_start = ?) and (d.station_name_end = ? and d.road_station_end = ?)");
 
             // Определяем значения параметров
-            preparedStatement.setString(1, getNumberOfStationImpl.codeOfStation(nameOfStationStart, roadOfStationStart));
-            preparedStatement.setString(2, getNumberOfStationImpl.codeOfStation(nameOfStationEnd, roadOfStationEnd));
+            preparedStatement.setString(1, nameOfStationStart);
+            preparedStatement.setString(2, roadOfStationStart);
+            preparedStatement.setString(3, nameOfStationEnd);
+            preparedStatement.setString(4, roadOfStationEnd);
 
             // Выполняем запрос
             resultSet = preparedStatement.executeQuery();
@@ -60,13 +62,14 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
                     result = api.execSomeMethod("froute.php", route);
                     distance = result.execute().body().get(0).routes;
 
-                   // System.out.println("Нет в базе: " + nameOfStationStart + " " + nameOfStationEnd + " " + route);
+                    //System.out.println("Нет в базе: " + nameOfStationStart + " " + nameOfStationEnd + " " + route);
                     additionalClassForGetRoadOfStations.insertDistanceToDB(nameOfStationStart, roadOfStationStart, nameOfStationEnd, roadOfStationEnd, distance);
                 } catch (IOException e) {
                     logger.error("Ошибка получения данных с портала: " + result.request().url());
                 }
             }
         } catch (SQLException sqlEx) {
+            sqlEx.printStackTrace();
             logger.error("Ошибка запроса " + preparedStatement);
         } finally {
             try {
