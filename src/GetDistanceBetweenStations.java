@@ -10,6 +10,6 @@
 */
 
 public interface GetDistanceBetweenStations {
-    String getDistanceBetweenStations(String nameOfStationStart, String nameOfStationEnd);
+    String getDistanceBetweenStations(String nameOfStationStart, String roadOfStationStart, String nameOfStationEnd, String roadOfStationEnd);
 
 }

@@ -1,5 +1,18 @@
 import java.util.*;
 
+/*
+*
+* Основной класс алгоритма расчета
+*
+* @author Vladislav Klochkov
+* @version 1.0
+* @create 01.11.2017
+*
+* 06.11.2017 - Переработана логина с использованием названия ЖД
+* 07.11.2017 - Переработан цикл для формирования маршрута некратного значения маршруты/вагоны
+*
+*/
+
 public class MethodOfLogicBasic {
 
     private GetBasicListOfRoutes getBasicListOfRoutes = new GetBasicListOfRoutes();
@@ -21,10 +34,8 @@ public class MethodOfLogicBasic {
         int countCircle = countRoutes / countWagons;
         HashMap<List<String>, String> mapDistance = new HashMap<>();
 
-        System.out.println(tempMapOfRoutes);
-        System.out.println(tempMapOfWagons);
-
-        for (int a = 0; a < countCircle; a++) {
+        int a = 0; // временные метки
+        while (!tempMapOfRoutes.isEmpty()) {
 
             // Очищаем массивы
             listOfRoutes.clear();
@@ -36,12 +47,10 @@ public class MethodOfLogicBasic {
                 listOfRoutes.add(tempMapOfRoute.getValue());
             }
 
-            //System.out.println(listOfRoutes);
-
             // Получаем список станций без задвоений(District), чтобы снизить нагрузку на базу
             for (int j = 0; j < listOfRoutes.size(); j++) {
                 String[] startStation = listOfRoutes.get(j).toString().split(", ");
-                tempStationDistrict.add(startStation[1].trim());
+                tempStationDistrict.add(startStation[1].trim() + ", " + startStation[0].trim());
             }
 
             // По каждому вагону высчитываем расстояние до каждой начальной станнции маршрутов
@@ -51,15 +60,21 @@ public class MethodOfLogicBasic {
                 // Поулчаем номер вагона
                 String numberOfWagon = valueOfTempMapOfWagons[0].trim();
 
+                // Получаем ЖД назначения вагона
+                String roadOfWagonEnd = valueOfTempMapOfWagons[1].trim();
+
                 // Получаем станцию назначения вагона
-                String stationNameEnd = valueOfTempMapOfWagons[1].trim();
+                String stationNameEnd = valueOfTempMapOfWagons[2].trim();
 
                 // Цикл расчета расстояния и заполнения мапы
-                for (String stationNameStart : tempStationDistrict) {
+                for (String stationNameStartArray : tempStationDistrict) {
                     List<String> stationAndDistance = new ArrayList<>();
+                    String[] roadAndNameOfStation = stationNameStartArray.split(", ");
+                    String stationNameStart = roadAndNameOfStation[0].trim();
+                    String roadOfStationStart = roadAndNameOfStation[1].trim().replace("[", "");
                     stationAndDistance.add(numberOfWagon);
                     stationAndDistance.add(stationNameStart);
-                    mapDistance.put(stationAndDistance, getDistanceBetweenStations.getDistanceBetweenStations(stationNameEnd, stationNameStart));
+                    mapDistance.put(stationAndDistance, getDistanceBetweenStations.getDistanceBetweenStations(stationNameEnd, roadOfWagonEnd, stationNameStart, roadOfStationStart));
                 }
             }
 
@@ -91,64 +106,71 @@ public class MethodOfLogicBasic {
 
             for (int i = 0; i < countWagons; i++) {
 
-                Map.Entry<Integer, List<String>> mapDistanceSortFirstElement = mapDistanceSort.entrySet().iterator().next();
-                List<String> listRouteMinDistance = mapDistanceSortFirstElement.getValue();
-                String[] parserRouteMinDistance = listRouteMinDistance.get(0).split(", ");
-                String numberOfWagon = parserRouteMinDistance[0].replace("[", "").trim();
-                String stationStartOfWagon = parserRouteMinDistance[1].replace("]", "").trim();
+                if (!mapDistanceSort.isEmpty()) {
+                    Map.Entry<Integer, List<String>> mapDistanceSortFirstElement = mapDistanceSort.entrySet().iterator().next();
+                    List<String> listRouteMinDistance = mapDistanceSortFirstElement.getValue();
+                    String[] parserRouteMinDistance = listRouteMinDistance.get(0).split(", ");
+                    String numberOfWagon = parserRouteMinDistance[0].replace("[", "").trim();
+                    String stationStartOfWagon = parserRouteMinDistance[1].replace("]", "").trim();
 
-                for (HashMap.Entry<Integer, List<Object>> tempMapOfRouteForDelete : mapOfRoutesForDelete.entrySet()) {
-                    listOfRoutesForDelete.add(tempMapOfRouteForDelete.getValue());
-                }
-
-                int countFoundStations = 0;
-                StringBuilder stringBuilder = new StringBuilder();
-                for (Iterator<HashMap.Entry<Integer, List<Object>>> it = mapOfRoutesForDelete.entrySet().iterator(); it.hasNext(); ) {
-                    HashMap.Entry<Integer, List<Object>> entry = it.next();
-                    for (int j = 0; j < listOfRoutesForDelete.size(); j++) {
-                        String[] startStation = listOfRoutesForDelete.get(j).toString().split(", ");
-                        if (startStation[1].trim().equals(stationStartOfWagon)) {
-                            if (entry.getValue().equals(listOfRoutesForDelete.get(j))) {
-                                countFoundStations++;
-                                it.remove();
-                                finalTempMap.put(numberOfWagon, listOfRoutesForDelete.get(j));
-                                stringBuilder.append(numberOfWagon);
-                                stringBuilder.append(", ");
-                                stringBuilder.append(startStation[3].replace("]", "").trim());
-                                mapNewOfWagons.put(i, stringBuilder.toString());
-                            }
-                            break;
-                        }
+                    for (HashMap.Entry<Integer, List<Object>> tempMapOfRouteForDelete : mapOfRoutesForDelete.entrySet()) {
+                        listOfRoutesForDelete.add(tempMapOfRouteForDelete.getValue());
                     }
-                }
 
-                tempMapOfWagons = mapNewOfWagons;
-                tempMapOfRoutes = mapOfRoutesForDelete;
-
-                listOfRoutesForDelete.clear();
-
-                for (Iterator<Map.Entry<Integer, List<String>>> it = mapDistanceSort.entrySet().iterator(); it.hasNext(); ) {
-                    Map.Entry<Integer, List<String>> entry = it.next();
-
-                    for (String listStation : tempStationDistrict) {
-                        if (!(countFoundStations == 0)) {
-                            if (entry.getValue().contains("[" + numberOfWagon + ", " + listStation + "]")) {
-                                it.remove();
-                            }
-                        } else {
-                            if (entry.getValue().contains(listRouteMinDistance.get(0))) {
-                                it.remove();
-                                i--;
+                    int countFoundStations = 0;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (Iterator<HashMap.Entry<Integer, List<Object>>> it = mapOfRoutesForDelete.entrySet().iterator(); it.hasNext(); ) {
+                        HashMap.Entry<Integer, List<Object>> entry = it.next();
+                        for (int j = 0; j < listOfRoutesForDelete.size(); j++) {
+                            String[] startStation = listOfRoutesForDelete.get(j).toString().split(", ");
+                            if (startStation[1].trim().equals(stationStartOfWagon)) {
+                                if (entry.getValue().equals(listOfRoutesForDelete.get(j))) {
+                                    countFoundStations++;
+                                    it.remove();
+                                    finalTempMap.put(numberOfWagon, listOfRoutesForDelete.get(j));
+                                    stringBuilder.append(numberOfWagon);
+                                    stringBuilder.append(", ");
+                                    stringBuilder.append(startStation[2].trim());
+                                    stringBuilder.append(", ");
+                                    stringBuilder.append(startStation[3].replace("]", "").trim());
+                                    mapNewOfWagons.put(i, stringBuilder.toString());
+                                }
                                 break;
                             }
                         }
                     }
-                }
 
-                //System.out.println(mapDistanceSort);
-                System.out.println("Вагон номер " + numberOfWagon + " едет на станцию " + stationStartOfWagon + ": " + listRouteMinDistance.get(1) + " км.");
+                    tempMapOfWagons = mapNewOfWagons;
+                    tempMapOfRoutes = mapOfRoutesForDelete;
+
+                    listOfRoutesForDelete.clear();
+
+                    for (Iterator<Map.Entry<Integer, List<String>>> it = mapDistanceSort.entrySet().iterator(); it.hasNext(); ) {
+                        Map.Entry<Integer, List<String>> entry = it.next();
+
+                        for (String listStation : tempStationDistrict) {
+                            String[] stationOfList = listStation.split(", ");
+                            if (!(countFoundStations == 0)) {
+                                if (entry.getValue().contains("[" + numberOfWagon + ", " + stationOfList[0].trim() + "]")) {
+                                    it.remove();
+                                }
+                            } else {
+                                if (entry.getValue().contains(listRouteMinDistance.get(0))) {
+                                    it.remove();
+                                    i--;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // временные метки
+                    System.out.println("Вагон номер " + numberOfWagon + " едет на станцию " + stationStartOfWagon + ": " + listRouteMinDistance.get(1) + " км.");
+                }
             }
 
+            // временные метки
+            a++;
             System.out.println("----------------------------------------");
             System.out.println(a + " finalTempMap: " + finalTempMap);
             System.out.println("----------------------------------------");

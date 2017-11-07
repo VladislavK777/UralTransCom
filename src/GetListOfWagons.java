@@ -44,9 +44,8 @@ public class GetListOfWagons {
         fillMapOfWagons();
     }
 
-
+    // Заполняем мапу вагонами
     private void fillMapOfWagons() {
-
         // Получаем файл формата xls
         try {
             fileInputStream = new FileInputStream(this.file);
@@ -72,12 +71,6 @@ public class GetListOfWagons {
                         stringStationAndWagon.append(xssfRow.getCell(c).getStringCellValue());
                     }
                 }
-                //System.out.println(stringStationAndWagon);
-                /*stringStationAndWagon.append(row.getCell(0).getStringCellValue());
-                stringStationAndWagon.append(", ");
-                stringStationAndWagon.append(row.getCell(7).getStringCellValue());
-                stringStationAndWagon.append(", ");
-                stringStationAndWagon.append(row.getCell(6).getStringCellValue());*/
                 mapOfWagons.put(i, stringStationAndWagon.toString());
                 i++;
             }

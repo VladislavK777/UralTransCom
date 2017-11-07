@@ -72,16 +72,16 @@ public class GetNumberOfStationImpl extends ConnectionToDBMySQL implements GetNu
 
     // Метод выстроения строки
     @Override
-    public String getStringQueryOfRoute(String nameOfStation1, String roadOfStation1, String nameOfStation2, String roadOfStation2) {
+    public String getStringQueryOfRoute(String nameOfStationStart, String roadOfStationStart, String nameOfStationEnd, String roadOfStationEnd) {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Получаем код станции назначения вагона
-        stringBuilder.append(codeOfStation(nameOfStation1, roadOfStation1));
+        stringBuilder.append(codeOfStation(nameOfStationStart, roadOfStationStart));
 
         stringBuilder.append(";");
 
         // Получаем код станции отправления маршрута
-        stringBuilder.append(codeOfStation(nameOfStation2, roadOfStation2));
+        stringBuilder.append(codeOfStation(nameOfStationEnd, roadOfStationEnd));
         return stringBuilder.toString();
     }
 

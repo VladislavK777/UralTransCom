@@ -14,5 +14,5 @@
 
 public interface GetNumberOfStation {
     String codeOfStation(String name, String road);
-    String getStringQueryOfRoute(String nameOfStation1, String roadOfStation1, String nameOfStation2, String roadOfStation2);
+    String getStringQueryOfRoute(String nameOfStationStart, String roadOfStationStart, String nameOfStationEnd, String roadOfStationEnd);
 }
