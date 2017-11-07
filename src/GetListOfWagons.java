@@ -74,7 +74,6 @@ public class GetListOfWagons {
                 mapOfWagons.put(i, stringStationAndWagon.toString());
                 i++;
             }
-
         } catch (IOException e) {
             logger.error("Ошибка загруки файла");
         } catch (OLE2NotOfficeXmlFileException e1) {

@@ -51,6 +51,7 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
                 distance = resultSet.getString(1);
             }
 
+            //System.out.println(nameOfStationStart + " " + nameOfStationEnd + " " + distance);
             // Если в базе нет расстояния, то берем с веб-сервиса и добавляем в базу
             if (distance.isEmpty()) {
                 String route = getNumberOfStationImpl.getStringQueryOfRoute(nameOfStationStart, roadOfStationStart, nameOfStationEnd, roadOfStationEnd);
@@ -58,6 +59,8 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
                 try {
                     result = api.execSomeMethod("froute.php", route);
                     distance = result.execute().body().get(0).routes;
+
+                   // System.out.println("Нет в базе: " + nameOfStationStart + " " + nameOfStationEnd + " " + route);
                     additionalClassForGetRoadOfStations.insertDistanceToDB(nameOfStationStart, roadOfStationStart, nameOfStationEnd, roadOfStationEnd, distance);
                 } catch (IOException e) {
                     logger.error("Ошибка получения данных с портала: " + result.request().url());
@@ -82,7 +85,6 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
                 logger.error("Ошибка закрытия соединения");
             }
         }
-        System.out.println(nameOfStationStart + " " + nameOfStationEnd + " " + distance);
         return distance;
     }
 }
