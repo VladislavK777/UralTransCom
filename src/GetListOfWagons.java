@@ -79,8 +79,6 @@ public class GetListOfWagons {
         } catch (OLE2NotOfficeXmlFileException e1) {
             logger.error("Некорректный формат файла, необходим формат xlsx");
         }
-
-        System.out.println(mapOfWagons);
     }
 
     public HashMap<Integer, String> getMapOfWagons() {

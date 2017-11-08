@@ -52,24 +52,7 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
             while (resultSet.next()) {
                 distance = resultSet.getString(1);
             }
-
-            //System.out.println(nameOfStationStart + " " + nameOfStationEnd + " " + distance);
-            // Если в базе нет расстояния, то берем с веб-сервиса и добавляем в базу
-            if (distance.isEmpty()) {
-                String route = getNumberOfStationImpl.getStringQueryOfRoute(nameOfStationStart, roadOfStationStart, nameOfStationEnd, roadOfStationEnd);
-                Call<List<SomeResponce>> result = null;
-                try {
-                    result = api.execSomeMethod("froute.php", route);
-                    distance = result.execute().body().get(0).routes;
-
-                    //System.out.println("Нет в базе: " + nameOfStationStart + " " + nameOfStationEnd + " " + route);
-                    additionalClassForGetRoadOfStations.insertDistanceToDB(nameOfStationStart, roadOfStationStart, nameOfStationEnd, roadOfStationEnd, distance);
-                } catch (IOException e) {
-                    logger.error("Ошибка получения данных с портала: " + result.request().url());
-                }
-            }
         } catch (SQLException sqlEx) {
-            sqlEx.printStackTrace();
             logger.error("Ошибка запроса " + preparedStatement);
         } finally {
             try {
@@ -88,6 +71,21 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
                 logger.error("Ошибка закрытия соединения");
             }
         }
+            //System.out.println(nameOfStationStart + " " + nameOfStationEnd + " " + distance);
+            // Если в базе нет расстояния, то берем с веб-сервиса и добавляем в базу
+            if (distance.isEmpty()) {
+                String route = getNumberOfStationImpl.getStringQueryOfRoute(nameOfStationStart, roadOfStationStart, nameOfStationEnd, roadOfStationEnd);
+                Call<List<SomeResponce>> result = null;
+                try {
+                    result = api.execSomeMethod("froute.php", route);
+                    distance = result.execute().body().get(0).routes;
+
+                    //System.out.println("Нет в базе: " + nameOfStationStart + " " + nameOfStationEnd + " " + route);
+                    additionalClassForGetRoadOfStations.insertDistanceToDB(nameOfStationStart, roadOfStationStart, nameOfStationEnd, roadOfStationEnd, distance);
+                } catch (IOException e) {
+                    logger.error("Ошибка получения данных с портала: " + result.request().url());
+                }
+            }
         return distance;
     }
 }

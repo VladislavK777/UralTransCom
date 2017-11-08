@@ -25,17 +25,24 @@ public class MethodOfLogicBasic {
     private List<Object> listOfRoutes = new ArrayList();
     private HashSet<String> tempStationDistrict = new HashSet();
 
+    private final int LOADING_OF_WAGON = 7;
+    private final int UNLOADING_OF_WAGON = 4;
+
     public void lookingForOptimalMapOfRoute() {
 
         tempMapOfRoutes = getBasicListOfRoutes.getMapOfRoutes();
         tempMapOfWagons = getListOfWagons.getMapOfWagons();
-        int countWagons = tempMapOfWagons.size();
-        int countRoutes = tempMapOfRoutes.size();
-        int countCircle = countRoutes / countWagons;
+
+        // int countRoutes = tempMapOfRoutes.size();
+        // int countCircle = countRoutes / countWagons;
         HashMap<List<String>, String> mapDistance = new HashMap<>();
 
         int a = 0; // временные метки
-        while (!tempMapOfRoutes.isEmpty()) {
+
+        while (!tempMapOfRoutes.isEmpty() && !tempMapOfWagons.isEmpty()) {
+
+            int countWagons = tempMapOfWagons.size();
+            //System.out.println(countWagons);
 
             // Очищаем массивы
             listOfRoutes.clear();
@@ -53,7 +60,11 @@ public class MethodOfLogicBasic {
                 tempStationDistrict.add(startStation[1].trim() + ", " + startStation[0].trim());
             }
 
-            // По каждому вагону высчитываем расстояние до каждой начальной станнции маршрутов
+            /*
+            * По каждому вагону высчитываем расстояние до каждой начальной станнции маршрутов
+            * Перенести в отдельный класс.
+            * Переработать метод, чтобы не обращаться в БД повторно с одини и теме же значениями
+            */
             for (int i = 0; i < countWagons; i++) {
                 String[] valueOfTempMapOfWagons = tempMapOfWagons.get(i).split(", ");
 
@@ -80,7 +91,7 @@ public class MethodOfLogicBasic {
 
             Map<Integer, List<String>> mapDistanceSort = new LinkedHashMap<>();
 
-            // Поиск меньшего значения в мапе(переделать в метод, организовать отдельный класс)
+            // Поиск меньшего значения в мапе
             int index = mapDistance.size();
             CompareMapValue[] compareMapValues = new CompareMapValue[index];
             index = 0;
@@ -98,14 +109,15 @@ public class MethodOfLogicBasic {
             }
 
             HashMap<Integer, List<Object>> mapOfRoutesForDelete = tempMapOfRoutes;
-            //HashMap<Integer, String> mapNewOfWagons = new HashMap<>();
+            HashMap<Integer, String> mapNewOfWagons = new HashMap<>();
             List<Object> listOfRoutesForDelete = new ArrayList();
             HashMap<String, Object> finalTempMap = new HashMap<>();
+
             //System.out.println(mapDistanceSort);
 
             // for (int i = 0; i < countWagons; i++) {
 
-            if (!mapDistanceSort.isEmpty()) {
+            if (!mapDistanceSort.isEmpty() && !tempMapOfWagons.isEmpty()) {
                 Map.Entry<Integer, List<String>> mapDistanceSortFirstElement = mapDistanceSort.entrySet().iterator().next();
                 List<String> listRouteMinDistance = mapDistanceSortFirstElement.getValue();
                 String[] parserRouteMinDistance = listRouteMinDistance.get(0).split(", ");
@@ -117,6 +129,7 @@ public class MethodOfLogicBasic {
                 }
 
                 //int countFoundStations = 0;
+
                 StringBuilder stringBuilder = new StringBuilder();
                 for (Iterator<HashMap.Entry<Integer, List<Object>>> it = mapOfRoutesForDelete.entrySet().iterator(); it.hasNext(); ) {
                     HashMap.Entry<Integer, List<Object>> entry = it.next();
@@ -125,13 +138,9 @@ public class MethodOfLogicBasic {
                         if (startStation[1].trim().equals(stationStartOfWagon)) {
                             if (entry.getValue().equals(listOfRoutesForDelete.get(j))) {
                                 //countFoundStations++;
-                                it.remove();
-                                finalTempMap.put(numberOfWagon, listOfRoutesForDelete.get(j));
-                                stringBuilder.append(numberOfWagon);
-                                stringBuilder.append(", ");
-                                stringBuilder.append(startStation[2].trim());
-                                stringBuilder.append(", ");
-                                stringBuilder.append(startStation[3].replace("]", "").trim());
+
+                                fullDays(numberOfWagon, listRouteMinDistance.get(1), startStation[4].replace("]", "").trim());
+                                System.out.println(numberOfWagon + " " + getNumberOfDaysOfWagon(numberOfWagon));
 
                                 int getKeyNumber = 0;
                                 Set<Map.Entry<Integer, String>> entrySet = tempMapOfWagons.entrySet();
@@ -140,20 +149,42 @@ public class MethodOfLogicBasic {
                                         getKeyNumber = pair.getKey();
                                     }
                                 }
-                                //System.out.println(getKeyNumber);
-                                tempMapOfWagons.replace(getKeyNumber, stringBuilder.toString());
-                                //System.out.println(tempMapOfWagons);
+                                if (getNumberOfDaysOfWagon(numberOfWagon) < 31) {
+                                    it.remove();
+                                    finalTempMap.put(numberOfWagon, listOfRoutesForDelete.get(j));
+                                    stringBuilder.append(numberOfWagon);
+                                    stringBuilder.append(", ");
+                                    stringBuilder.append(startStation[2].trim());
+                                    stringBuilder.append(", ");
+                                    stringBuilder.append(startStation[3].replace("]", "").trim());
+
+
+                                    //System.out.println(getKeyNumber);
+                                    tempMapOfWagons.replace(getKeyNumber, stringBuilder.toString());
+                                    a++;
+                                    //System.out.println("----------------------------------------");
+                                    System.out.println(a + " finalTempMap: " + finalTempMap);
+                                    //System.out.println(tempMapOfWagons);
+                                } else {
+                                    System.out.println("Delete the wagon: " + tempMapOfWagons.get(getKeyNumber));
+                                    //finalTempMap.put(numberOfWagon, listOfRoutesForDelete.get(j));
+                                    tempMapOfWagons.remove(getKeyNumber);
+                                    int i = 0;
+                                    for (HashMap.Entry<Integer, String> m : tempMapOfWagons.entrySet()) {
+                                        mapNewOfWagons.put(i, m.getValue());
+                                        i++;
+                                    }
+                                    tempMapOfWagons = mapNewOfWagons;
+                                }
                                 //mapNewOfWagons.put(i, stringBuilder.toString());
                             }
                             break;
                         }
                     }
                 }
-
-               // tempMapOfWagons = mapNewOfWagons;
-               // System.out.println(tempMapOfWagons);
+                //System.out.println(a + ": " + tempMapOfWagons);
                 tempMapOfRoutes = mapOfRoutesForDelete;
-                //System.out.println(tempMapOfRoutes);
+
 
                 listOfRoutesForDelete.clear();
 
@@ -178,16 +209,16 @@ public class MethodOfLogicBasic {
 
                 // временные метки
                 System.out.println("Вагон номер " + numberOfWagon + " едет на станцию " + stationStartOfWagon + ": " + listRouteMinDistance.get(1) + " км.");
+                System.out.println("-------------------------------------------------");
             }
             //}
 
             // временные метки
-            a++;
-            //System.out.println("----------------------------------------");
-            System.out.println(a + " finalTempMap: " + finalTempMap);
-            System.out.println("----------------------------------------");
+
         }
+        System.out.println(tempMapOfRoutes);
     }
+
 
     public HashMap<Integer, List<Object>> getTempMapOfRoutes() {
         return tempMapOfRoutes;
@@ -205,5 +236,34 @@ public class MethodOfLogicBasic {
         this.tempMapOfWagons = tempMapOfWagons;
     }
 
+
+    HashMap<String, Double> mapOfDaysOfWagon = new HashMap<>();
+
+    private void fullDays(String numberOfWagon, String distanceOfEmpty, String distanceOfRoute) {
+        double fullMonthCircle = 0;
+        if (mapOfDaysOfWagon.get(numberOfWagon) == null) {
+            fullMonthCircle += Double.valueOf(distanceOfEmpty) / 300 + 1;
+            fullMonthCircle += LOADING_OF_WAGON;
+            fullMonthCircle += Double.valueOf(distanceOfRoute) / 300 + 1;
+            fullMonthCircle += UNLOADING_OF_WAGON;
+            mapOfDaysOfWagon.put(numberOfWagon, fullMonthCircle);
+        } else {
+            for (Map.Entry<String, Double> map : mapOfDaysOfWagon.entrySet()) {
+                if (map.getKey().equals(numberOfWagon)) {
+                    double tempDays = map.getValue();
+                    tempDays += Double.valueOf(distanceOfEmpty) / 300 + 1;
+                    tempDays += LOADING_OF_WAGON;
+                    tempDays += Double.valueOf(distanceOfRoute) / 300 + 1;
+                    tempDays += UNLOADING_OF_WAGON;
+                    mapOfDaysOfWagon.replace(map.getKey(), tempDays);
+                }
+            }
+        }
+        //System.out.println(mapOfDaysOfWagon);
+    }
+
+    private double getNumberOfDaysOfWagon(String numberOfWagon) {
+        return mapOfDaysOfWagon.get(numberOfWagon);
+    }
 
 }
