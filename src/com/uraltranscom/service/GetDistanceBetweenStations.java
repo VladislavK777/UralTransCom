@@ -1,4 +1,4 @@
-
+package com.uraltranscom.service;
 /*
 *
 * Интерфейс получения расстояния между станциями

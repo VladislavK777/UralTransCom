@@ -1,3 +1,5 @@
+package com.uraltranscom.dao;
+
 /*
 *
 * Класс соединения с БД

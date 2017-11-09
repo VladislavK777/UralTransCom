@@ -1,3 +1,5 @@
+package com.uraltranscom.service;
+
 import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -43,7 +45,7 @@ public class GetListOfWagons {
     private XSSFWorkbook xssfWorkbook;
     private XSSFSheet sheet;
 
-    protected GetListOfWagons() {
+    public GetListOfWagons() {
         fillMapOfWagons();
     }
 

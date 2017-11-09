@@ -1,4 +1,4 @@
-/*
+package com.uraltranscom.service.additional;/*
 *
 * Дополнительный класс для получения названия ЖД
 *
@@ -12,6 +12,8 @@
 *
 */
 
+import com.uraltranscom.dao.ConnectionToDBMySQL;
+import com.uraltranscom.service.impl.GetNumberOfStationImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

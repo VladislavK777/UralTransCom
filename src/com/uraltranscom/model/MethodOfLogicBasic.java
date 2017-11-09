@@ -1,3 +1,10 @@
+package com.uraltranscom.model;
+
+import com.uraltranscom.service.GetBasicListOfRoutes;
+import com.uraltranscom.service.GetFullMonthCircleOfWagon;
+import com.uraltranscom.service.GetListOfWagons;
+import com.uraltranscom.service.additional.CompareMapValue;
+import com.uraltranscom.service.impl.GetDistanceBetweenStationsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,16 +43,24 @@ public class MethodOfLogicBasic {
     private Map<Integer, List<Object>> tempMapOfRoutes = new HashMap<>();
     private Map<Integer, String> tempMapOfWagons = new HashMap<>();
 
-    private List<Object> listOfRoutes = new ArrayList();
-    private Set<String> tempStationDistrict = new HashSet();
-
     public void lookingForOptimalMapOfRoute() {
 
         tempMapOfRoutes = getBasicListOfRoutes.getMapOfRoutes();
         tempMapOfWagons = getListOfWagons.getMapOfWagons();
+
+        // Список маршрутов
+        List<Object> listOfRoutes = new ArrayList();
+
+        // Список станций из списка маршрутов с удалением повторок
+        Set<String> tempStationDistrict = new HashSet();
+
+        // Список распределенных вагонов
         Set<String> listOfDistributedWagons = new HashSet<>();
+
+        // Список нераспределенных вагонов
         Set<String> listOfUnDistributedWagons = new HashSet<>();
 
+        // Список расстояний
         Map<List<String>, String> mapDistance = new HashMap<>();
 
         // Запускаем цикл
@@ -158,19 +173,32 @@ public class MethodOfLogicBasic {
                                     }
                                 }
 
+                                // Число дней пройденных вагоном
                                 double numberOfDaysOfWagon = getFullMonthCircleOfWagon.getNumberOfDaysOfWagon(numberOfWagon);
 
                                 // Если больше 30 дней, то исключаем вагон, лимит 30 дней
                                 if (numberOfDaysOfWagon < 31) {
+
+                                    // Удаляем маршрут, так как он занят вагоном
                                     it.remove();
+
+                                    // Добавляем маршрут в мапу с номером вагона
                                     finalMapOfRoutesWithWagons.put(numberOfWagon, listOfRoutesForDelete.get(j));
+
+                                    // Пишем в файл Excel
                                     WriteToFileExcel.writeToFileExcelDistributedRoutes(numberOfWagon, listOfRoutesForDelete.get(j), listRouteMinDistance.get(1), numberOfDaysOfWagon);
+
+                                    // Формируем строку для формирования маршрута вагону
                                     stringBuilder.append(numberOfWagon);
                                     stringBuilder.append(", ");
                                     stringBuilder.append(startStation[2].trim());
                                     stringBuilder.append(", ");
                                     stringBuilder.append(startStation[3].replace("]", "").trim());
+
+                                    // Заменяем маршрут вагону
                                     tempMapOfWagons.replace(getKeyNumber, stringBuilder.toString());
+
+                                    // Добавляем новый вагон в список
                                     listOfDistributedWagons.add(numberOfWagon);
 
                                     logger.info("Вагон номер " + numberOfWagon + " едет на станцию " + stationStartOfWagon + ": " + listRouteMinDistance.get(1) + " км.");
@@ -214,7 +242,6 @@ public class MethodOfLogicBasic {
         WriteToFileExcel.writeToFileExcelUnDistributedRoutes(tempMapOfRoutes);
         WriteToFileExcel.writeToFileExcelUnDistributedWagons(listOfUnDistributedWagons);
     }
-
 
     public Map<Integer, List<Object>> getTempMapOfRoutes() {
         return tempMapOfRoutes;

@@ -1,3 +1,5 @@
+package com.uraltranscom.api;
+
 import com.google.gson.annotations.SerializedName;
 
 /*
