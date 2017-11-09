@@ -11,8 +11,9 @@ import java.sql.*;
 * @version 1.0
 * @create 25.10.2017
 *
-*
-* 06.11.2017 - В метод и запрос добавлен параметр road
+* 06.11.2017
+*   @version 1.1
+*   1. В метод и запрос добавлен параметр road
 *
 */
 
@@ -84,6 +85,4 @@ public class GetNumberOfStationImpl extends ConnectionToDBMySQL implements GetNu
         stringBuilder.append(codeOfStation(nameOfStationEnd, roadOfStationEnd));
         return stringBuilder.toString();
     }
-
-
 }

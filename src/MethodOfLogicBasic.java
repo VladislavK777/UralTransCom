@@ -8,9 +8,15 @@ import java.util.*;
 * @version 1.0
 * @create 01.11.2017
 *
-* 06.11.2017 - Переработана логина с использованием названия ЖД
-* 07.11.2017 - Переработан цикл для формирования маршрута некратного значения маршруты/вагоны
-* 08.11.2017 - Добавлена логика расчета по дням, лимит 30 дней
+* 06.11.2017
+*   @version 1.1
+*   1. Переработана логина с использованием названия ЖД
+* 07.11.2017
+*   @version 1.2
+ *  1. Переработан цикл для формирования маршрута некратного значения маршруты/вагоны
+* 08.11.2017
+*   @version 1.3
+*   1. Добавлена логика расчета по дням, лимит 30 дней
 *
 */
 
@@ -19,16 +25,13 @@ public class MethodOfLogicBasic {
     private GetBasicListOfRoutes getBasicListOfRoutes = new GetBasicListOfRoutes();
     private GetDistanceBetweenStationsImpl getDistanceBetweenStations = new GetDistanceBetweenStationsImpl();
     private GetListOfWagons getListOfWagons = new GetListOfWagons();
+    private GetFullMonthCircleOfWagon getFullMonthCircleOfWagon = new GetFullMonthCircleOfWagon();
 
     private HashMap<Integer, List<Object>> tempMapOfRoutes = new HashMap<>();
     private HashMap<Integer, String> tempMapOfWagons = new HashMap<>();
 
     private List<Object> listOfRoutes = new ArrayList();
     private HashSet<String> tempStationDistrict = new HashSet();
-
-    // Перенести в отдельный класс
-    private final int LOADING_OF_WAGON = 7;
-    private final int UNLOADING_OF_WAGON = 4;
 
     public void lookingForOptimalMapOfRoute() {
 
@@ -141,7 +144,7 @@ public class MethodOfLogicBasic {
                             if (entry.getValue().equals(listOfRoutesForDelete.get(j))) {
 
                                 // Расчет дней затраченных одним вагоном на один цикл
-                                fullDays(numberOfWagon, listRouteMinDistance.get(1), startStation[4].replace("]", "").trim());
+                                getFullMonthCircleOfWagon.fullDays(numberOfWagon, listRouteMinDistance.get(1), startStation[4].replace("]", "").trim());
                                 int getKeyNumber = 0;
                                 Set<Map.Entry<Integer, String>> entrySet = tempMapOfWagons.entrySet();
                                 for (Map.Entry<Integer, String> pair : entrySet) {
@@ -150,7 +153,7 @@ public class MethodOfLogicBasic {
                                     }
                                 }
 
-                                double numberOfDaysOfWagon = getNumberOfDaysOfWagon(numberOfWagon);
+                                double numberOfDaysOfWagon = getFullMonthCircleOfWagon.getNumberOfDaysOfWagon(numberOfWagon);
 
                                 // Если больше 30 дней, то исключаем вагон, лимит 30 дней
                                 if (numberOfDaysOfWagon < 31) {
@@ -217,34 +220,4 @@ public class MethodOfLogicBasic {
     public void setTempMapOfWagons(HashMap<Integer, String> tempMapOfWagons) {
         this.tempMapOfWagons = tempMapOfWagons;
     }
-
-
-    // Убрать в отдельный класс
-    HashMap<String, Double> mapOfDaysOfWagon = new HashMap<>();
-    private void fullDays(String numberOfWagon, String distanceOfEmpty, String distanceOfRoute) {
-        double fullMonthCircle = 0;
-        if (mapOfDaysOfWagon.get(numberOfWagon) == null) {
-            fullMonthCircle += Double.valueOf(distanceOfEmpty) / 300 + 1;
-            fullMonthCircle += LOADING_OF_WAGON;
-            fullMonthCircle += Double.valueOf(distanceOfRoute) / 300 + 1;
-            fullMonthCircle += UNLOADING_OF_WAGON;
-            mapOfDaysOfWagon.put(numberOfWagon, fullMonthCircle);
-        } else {
-            for (Map.Entry<String, Double> map : mapOfDaysOfWagon.entrySet()) {
-                if (map.getKey().equals(numberOfWagon)) {
-                    double tempDays = map.getValue();
-                    tempDays += Double.valueOf(distanceOfEmpty) / 300 + 1;
-                    tempDays += LOADING_OF_WAGON;
-                    tempDays += Double.valueOf(distanceOfRoute) / 300 + 1;
-                    tempDays += UNLOADING_OF_WAGON;
-                    mapOfDaysOfWagon.replace(map.getKey(), tempDays);
-                }
-            }
-        }
-    }
-
-    private double getNumberOfDaysOfWagon(String numberOfWagon) {
-        return mapOfDaysOfWagon.get(numberOfWagon);
-    }
-
 }
