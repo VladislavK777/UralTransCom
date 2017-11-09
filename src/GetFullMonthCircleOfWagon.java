@@ -16,7 +16,7 @@ public class GetFullMonthCircleOfWagon {
     // Параметры крытых вагонов
     private final int LOADING_OF_WAGON = 7;
     private final int UNLOADING_OF_WAGON = 4;
-    HashMap<String, Double> mapOfDaysOfWagon = new HashMap<>();
+    Map<String, Double> mapOfDaysOfWagon = new HashMap<>();
 
     /*
     * Метод расчета дней, пройденных вагоном за один цикл

@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /*
 *
@@ -31,7 +32,7 @@ public class GetListOfWagons {
     private static Logger logger = LoggerFactory.getLogger(GetListOfWagons.class);
 
     // Основаная мапа, куда записываем все вагоны
-    private HashMap<Integer, String> mapOfWagons = new HashMap<>();
+    private Map<Integer, String> mapOfWagons = new HashMap<>();
 
     // Переменные для работы с файлами
     private File file = new File("C:\\Users\\Vladislav.Klochkov\\Desktop\\wagons.xlsx");
@@ -42,7 +43,7 @@ public class GetListOfWagons {
     private XSSFWorkbook xssfWorkbook;
     private XSSFSheet sheet;
 
-    public GetListOfWagons() {
+    protected GetListOfWagons() {
         fillMapOfWagons();
     }
 
@@ -64,11 +65,13 @@ public class GetListOfWagons {
                         XSSFRow xssfRow = sheet.getRow(j);
                         stringStationAndWagon.append(xssfRow.getCell(c).getStringCellValue());
                         stringStationAndWagon.append(", ");
-                    } else if (row.getCell(c).getStringCellValue().equals("Дорога назначения")) {
+                    }
+                    if (row.getCell(c).getStringCellValue().equals("Дорога назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         stringStationAndWagon.append(xssfRow.getCell(c).getStringCellValue());
                         stringStationAndWagon.append(", ");
-                    } else if (row.getCell(c).getStringCellValue().equals("Ст. назначения")) {
+                    }
+                    if (row.getCell(c).getStringCellValue().equals("Ст. назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         stringStationAndWagon.append(xssfRow.getCell(c).getStringCellValue());
                     }
@@ -83,11 +86,11 @@ public class GetListOfWagons {
         }
     }
 
-    public HashMap<Integer, String> getMapOfWagons() {
+    public Map<Integer, String> getMapOfWagons() {
         return mapOfWagons;
     }
 
-    public void setMapOfWagons(HashMap<Integer, String> mapOfWagons) {
+    public void setMapOfWagons(Map<Integer, String> mapOfWagons) {
         this.mapOfWagons = mapOfWagons;
     }
 

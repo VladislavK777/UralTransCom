@@ -10,10 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /*
 *
@@ -31,7 +28,7 @@ public class GetBasicListOfRoutes {
     private static Logger logger = LoggerFactory.getLogger(GetBasicListOfRoutes.class);
 
     // Основаная мапа, куда записываем все маршруты
-    private HashMap<Integer, List<Object>> mapOfRoutes = new HashMap<>();
+    private Map<Integer, List<Object>> mapOfRoutes = new HashMap<>();
 
     // Переменные для работы с файлами
     private File file = new File("C:\\Users\\Vladislav.Klochkov\\Desktop\\test.xlsx");
@@ -76,11 +73,11 @@ public class GetBasicListOfRoutes {
         }
     }
 
-    public HashMap<Integer, List<Object>> getMapOfRoutes() {
+    public Map<Integer, List<Object>> getMapOfRoutes() {
         return mapOfRoutes;
     }
 
-    public void setMapOfRoutes(HashMap<Integer, List<Object>> mapOfRoutes) {
+    public void setMapOfRoutes(Map<Integer, List<Object>> mapOfRoutes) {
         this.mapOfRoutes = mapOfRoutes;
     }
 

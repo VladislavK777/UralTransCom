@@ -24,7 +24,6 @@ public class AdditionalClassForGetRoadOfStations extends ConnectionToDBMySQL {
 
     private static Connection connection;
     private static PreparedStatement preparedStatement;
-    //private static ResultSet resultSet;
 
     private GetNumberOfStationImpl getNumberOfStation = new GetNumberOfStationImpl();
 
