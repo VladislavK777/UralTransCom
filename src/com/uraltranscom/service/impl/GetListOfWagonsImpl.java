@@ -71,9 +71,9 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
                     if (row.getCell(c).getStringCellValue().equals("Вагон №")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         String val = Double.toString(xssfRow.getCell(c).getNumericCellValue());
-                        double dphi = xssfRow.getCell(c).getNumericCellValue();
-                        if ((dphi - (int) dphi) * 1000 == 0) {
-                            val = (int) dphi + "";
+                        double valueDouble = xssfRow.getCell(c).getNumericCellValue();
+                        if ((valueDouble - (int) valueDouble) * 1000 == 0) {
+                            val = (int) valueDouble + "";
                         }
                         stringStationAndWagon.append(val);
                         stringStationAndWagon.append(", ");
