@@ -1,4 +1,4 @@
-package com.uraltranscom.api;
+package com.uraltranscom;
 
 import com.uraltranscom.model.MethodOfLogicBasic;
 

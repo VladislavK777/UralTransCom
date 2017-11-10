@@ -1,8 +1,8 @@
 package com.uraltranscom.model;
 
-import com.uraltranscom.service.GetBasicListOfRoutes;
-import com.uraltranscom.service.GetFullMonthCircleOfWagon;
-import com.uraltranscom.service.GetListOfWagons;
+import com.uraltranscom.service.impl.GetBasicListOfRoutesImpl;
+import com.uraltranscom.service.impl.GetFullMonthCircleOfWagonImpl;
+import com.uraltranscom.service.impl.GetListOfWagonsImpl;
 import com.uraltranscom.service.additional.CompareMapValue;
 import com.uraltranscom.service.impl.GetDistanceBetweenStationsImpl;
 import org.slf4j.Logger;
@@ -35,18 +35,18 @@ public class MethodOfLogicBasic {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(MethodOfLogicBasic.class);
 
-    private GetBasicListOfRoutes getBasicListOfRoutes = new GetBasicListOfRoutes();
+    private GetBasicListOfRoutesImpl getBasicListOfRoutesImpl = new GetBasicListOfRoutesImpl();
     private GetDistanceBetweenStationsImpl getDistanceBetweenStations = new GetDistanceBetweenStationsImpl();
-    private GetListOfWagons getListOfWagons = new GetListOfWagons();
-    private GetFullMonthCircleOfWagon getFullMonthCircleOfWagon = new GetFullMonthCircleOfWagon();
+    private GetListOfWagonsImpl getListOfWagonsImpl = new GetListOfWagonsImpl();
+    private GetFullMonthCircleOfWagonImpl getFullMonthCircleOfWagonImpl = new GetFullMonthCircleOfWagonImpl();
 
     private Map<Integer, List<Object>> tempMapOfRoutes = new HashMap<>();
     private Map<Integer, String> tempMapOfWagons = new HashMap<>();
 
     public void lookingForOptimalMapOfRoute() {
 
-        tempMapOfRoutes = getBasicListOfRoutes.getMapOfRoutes();
-        tempMapOfWagons = getListOfWagons.getMapOfWagons();
+        tempMapOfRoutes = getBasicListOfRoutesImpl.getMapOfRoutes();
+        tempMapOfWagons = getListOfWagonsImpl.getMapOfWagons();
 
         // Список маршрутов
         List<Object> listOfRoutes = new ArrayList();
@@ -164,7 +164,7 @@ public class MethodOfLogicBasic {
                             if (entry.getValue().equals(listOfRoutesForDelete.get(j))) {
 
                                 // Расчет дней затраченных одним вагоном на один цикл
-                                getFullMonthCircleOfWagon.fullDays(numberOfWagon, listRouteMinDistance.get(1), startStation[4].replace("]", "").trim());
+                                getFullMonthCircleOfWagonImpl.fullDays(numberOfWagon, listRouteMinDistance.get(1), startStation[4].replace("]", "").trim());
                                 int getKeyNumber = 0;
                                 Set<Map.Entry<Integer, String>> entrySet = tempMapOfWagons.entrySet();
                                 for (Map.Entry<Integer, String> pair : entrySet) {
@@ -174,7 +174,7 @@ public class MethodOfLogicBasic {
                                 }
 
                                 // Число дней пройденных вагоном
-                                double numberOfDaysOfWagon = getFullMonthCircleOfWagon.getNumberOfDaysOfWagon(numberOfWagon);
+                                double numberOfDaysOfWagon = getFullMonthCircleOfWagonImpl.getNumberOfDaysOfWagon(numberOfWagon);
 
                                 // Если больше 30 дней, то исключаем вагон, лимит 30 дней
                                 if (numberOfDaysOfWagon < 31) {
