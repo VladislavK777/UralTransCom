@@ -15,7 +15,7 @@ INSERT INTO restapi.roads (road_name, road_fullname, country_of_road) VALUE ('К
 INSERT INTO restapi.roads (road_name, road_fullname, country_of_road) VALUE ('ЗСБ', 'Западно-Сибрская ж.д.', 'Россия');
 INSERT INTO restapi.roads (road_name, road_fullname, country_of_road) VALUE ('ВСБ', 'Восточно-Сибирская ж.д.', 'Россия');
 INSERT INTO restapi.roads (road_name, road_fullname, country_of_road) VALUE ('СЕВ', 'Северная ж.д.', 'Россия');
-INSERT INTO restapi.roads (road_name, road_fullname, country_of_road) VALUE ('УТИ', 'Узбекские ж.д.', 'Узбекистан');
+INSERT INTO restapi.roads (road_name, road_fullname, country_of_road) VALUE ('УЗБ', 'Узбекские ж.д.', 'Узбекистан');
 INSERT INTO restapi.roads (road_name, road_fullname, country_of_road) VALUE ('ТРК', 'Турецкая ж.д.', 'Турция');
 INSERT INTO restapi.roads (road_name, road_fullname, country_of_road) VALUE ('ОДС', 'Одесская ж.д.', 'Украина');
 INSERT INTO restapi.roads (road_name, road_fullname, country_of_road) VALUE ('ГРЗ', 'Грузинская ж.д.', 'Грузия');

@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +42,6 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
     // Переменные для работы с файлами
     private File file = new File("C:\\Users\\Vladislav.Klochkov\\Desktop\\wagons.xlsx");
     private FileInputStream fileInputStream;
-    private FileOutputStream fileOutputStream;
 
     // Переменные для работы с Excel файлом(формат XLSX)
     private XSSFWorkbook xssfWorkbook;
