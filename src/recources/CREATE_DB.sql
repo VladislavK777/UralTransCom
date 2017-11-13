@@ -2,7 +2,7 @@
 
 CREATE TABLE `restapi`.`stations` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `station_key` INT NOT NULL COMMENT 'Код станции',
+  `station_key` VARCHAR(6) NOT NULL COMMENT 'Код станции',
   `station_name` VARCHAR(150) NOT NULL COMMENT 'Название станции',
   `road` VARCHAR(45) NULL COMMENT 'Дорога, сокращенное название(Пример: МСК)',
   `roadFull` VARCHAR(100) NULL COMMENT 'Полное название ЖД(Пример: Московская ж.д.)',

@@ -82,7 +82,7 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
                 logger.error("Ошибка закрытия соединения");
             }
         }
-            //System.out.println(nameOfStationStart + " " + nameOfStationEnd + " " + distance);
+            //System.out.println(nameOfStationStart + " " +roadOfStationStart+ " " + nameOfStationEnd + " " + distance);
             // Если в базе нет расстояния, то берем с веб-сервиса и добавляем в базу
             if (distance.isEmpty()) {
                 String route = getNumberOfStationImpl.getStringQueryOfRoute(nameOfStationStart, roadOfStationStart, nameOfStationEnd, roadOfStationEnd);
