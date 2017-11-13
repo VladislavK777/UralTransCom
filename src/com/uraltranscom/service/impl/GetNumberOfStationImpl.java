@@ -36,7 +36,7 @@ public class GetNumberOfStationImpl extends ConnectionToDBMySQL implements GetNu
         String stationCode = new String();
         try {
             // Открываем соединение с БД
-            connection = DriverManager.getConnection(getUrl(), getUser(), getPass());
+            connection = DriverManager.getConnection(getURL(), getUSER(), getPASS());
 
             // Подготавливаем запрос
             preparedStatement = connection.prepareStatement("select s.station_key from stations s where s.station_name = ? and s.road = ?");

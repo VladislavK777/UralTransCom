@@ -33,7 +33,7 @@ public class AdditionalClassForGetRoadOfStations extends ConnectionToDBMySQL {
     public void insertDistanceToDB(String nameOfStationStart, String roadOfStationStart, String nameOfStationEnd, String roadOfStationEnd, String distance) {
         try {
             // Открываем соединение с БД
-            connection = DriverManager.getConnection(getUrl(), getUser(), getPass());
+            connection = DriverManager.getConnection(getURL(), getUSER(), getPASS());
 
             // Подготавливаем запрос
             preparedStatement = connection.prepareStatement("insert into distancebetweentwostations (station_key_start, station_name_start, road_station_start, station_key_end, station_name_end, road_station_end, distance) values (?, ?, ?, ?, ?, ?, ?)");

@@ -32,7 +32,6 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetDistanceBetweenStationsImpl.class);
 
-    private ConnectionToDBMySQL connectionToDBMySQL = new ConnectionToDBMySQL();
     private static Connection connection;
     private static PreparedStatement preparedStatement;
     private static ResultSet resultSet;
@@ -45,7 +44,7 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
         String distance = new String();
         try {
             // Открываем соединение с БД
-            connection = DriverManager.getConnection(connectionToDBMySQL.getUrl(), connectionToDBMySQL.getUser(), connectionToDBMySQL.getPass());
+            connection = DriverManager.getConnection(ConnectionToDBMySQL.getURL(), ConnectionToDBMySQL.getUSER(), ConnectionToDBMySQL.getPASS());
 
             // Подготавливаем запрос
             preparedStatement = connection.prepareStatement("select d.distance from distancebetweentwostations d where (d.station_name_start = ? and d.road_station_start = ?) and (d.station_name_end = ? and d.road_station_end = ?)");
