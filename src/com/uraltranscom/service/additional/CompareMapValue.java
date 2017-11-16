@@ -1,6 +1,8 @@
 package com.uraltranscom.service.additional;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /*
 *
@@ -29,4 +31,37 @@ public class CompareMapValue implements Comparable {
             return 0;
         }
     }
+
+    public static Map sortMap(Map<Integer, List<String>> mapDistanceSort) {
+        Map<Integer, List<String>> sortedMap = new LinkedHashMap<>(mapDistanceSort.size());
+
+        mapDistanceSort.forEach((k, v) -> {
+            String[] o3 = v.get(0).split(", ");
+            if ("1".equals(o3[2].replace("]", "").trim())) sortedMap.put(k, v);
+        });
+
+        mapDistanceSort.forEach((k, v) -> {
+            String[] o3 = v.get(0).split(", ");
+            if ("0".equals(o3[2].replace("]", "").trim())) sortedMap.put(k, v);
+        });
+
+        return sortedMap;
+    }
+
+    /*Map<List<String>, Integer> sortedMap = mapDistance.entrySet().stream()
+                    .sorted(
+                            Comparator.<Map.Entry<List<String>, Integer>, String>
+                                    comparing(e -> e.getKey().get(2)).reversed()
+                                    .thenComparingInt(Map.Entry::getValue)
+                    ).collect(
+                            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)
+                    );
+
+            mapDistance.entrySet().stream()
+                    .sorted(
+                            Comparator.<Map.Entry<List<String>, Integer>, String>
+                                    comparing(e -> e.getKey().get(2)).reversed()
+                                    .thenComparingInt(Map.Entry::getValue)
+                    ).forEach(System.out::println);
+*/
 }

@@ -13,19 +13,19 @@ package com.uraltranscom.dao;
 *   1. Добавление хранения пароля в ZooKeeper
 */
 
-import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 public class ConnectionToDBMySQL {
 
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(ConnectionToDBMySQL.class);
 
-    private static ZooKeeper zk;
+    private static final String URL = "jdbc:mysql://localhost:3306/restapi?autoReconnect=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASS = "root";
+
+    /*private static ZooKeeper zk;
     private static ZkConnector zkc = new ZkConnector();
 
     // Определяем параметры БД{
@@ -33,6 +33,8 @@ public class ConnectionToDBMySQL {
     private static final String URL = DATA_SOURCE[0];
     private static final String USER = DATA_SOURCE[1];
     private static final String PASS = DATA_SOURCE[2];
+
+
 
     private static String[] getDataFromZK() {
         String[] data = new String[3];
@@ -54,7 +56,7 @@ public class ConnectionToDBMySQL {
             logger.error("Ошибка подключения к ZooKeeper.");
         }
         return data;
-    }
+    }*/
 
     public static String getURL() {
         return URL;
