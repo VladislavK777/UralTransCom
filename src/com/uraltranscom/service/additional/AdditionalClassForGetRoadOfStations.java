@@ -7,7 +7,6 @@ package com.uraltranscom.service.additional;/*
 * @create 03.11.2017
 *
 * 07.11.2017
-*   @version 1.2
 *   1. Удалены методы получения названия ЖД
 *
 */
@@ -51,7 +50,7 @@ public class AdditionalClassForGetRoadOfStations extends ConnectionToDBMySQL {
             // Выполняем запрос
             preparedStatement.executeUpdate();
         } catch (SQLException sqlEx) {
-            logger.error("Ошибка запроса INSERT " + sqlEx.getMessage());
+            logger.error("Ошибка запроса INSERT " + sqlEx.getMessage() + "; Start: " + nameOfStationStart + ": Road: " + roadOfStationStart + "; End: " + nameOfStationEnd + ": Road: " + roadOfStationEnd);
         } finally {
             try {
                 connection.close();

@@ -9,8 +9,8 @@ package com.uraltranscom.dao;
 * @create 25.10.2017
 *
 * 13.11.2017
-*   @version 1.5
 *   1. Добавление хранения пароля в ZooKeeper
+*
 */
 
 import org.slf4j.Logger;

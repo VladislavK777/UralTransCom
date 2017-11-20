@@ -22,7 +22,6 @@ import java.util.List;
 * @create 25.10.2017
 *
 * 06.11.2017
-*   @version 1.1
 *   1. Добавлено внесение в мапу название ЖД, для более детального поиска номера станции
 *
 */
@@ -47,13 +46,17 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
             connection = DriverManager.getConnection(ConnectionToDBMySQL.getURL(), ConnectionToDBMySQL.getUSER(), ConnectionToDBMySQL.getPASS());
 
             // Подготавливаем запрос
-            preparedStatement = connection.prepareStatement("select d.distance from distancebetweentwostations d where (d.station_name_start = ? and d.road_station_start = ?) and (d.station_name_end = ? and d.road_station_end = ?)");
+            preparedStatement = connection.prepareStatement("select d.distance from distancebetweentwostations d where ((d.station_name_start = ? and d.road_station_start = ?) and (d.station_name_end = ? and d.road_station_end = ?)) or ((d.station_name_start = ? and d.road_station_start = ?) and (d.station_name_end = ? and d.road_station_end = ?))");
 
             // Определяем значения параметров
             preparedStatement.setString(1, nameOfStationStart);
             preparedStatement.setString(2, roadOfStationStart);
             preparedStatement.setString(3, nameOfStationEnd);
             preparedStatement.setString(4, roadOfStationEnd);
+            preparedStatement.setString(5, nameOfStationEnd);
+            preparedStatement.setString(6, roadOfStationEnd);
+            preparedStatement.setString(7, nameOfStationStart);
+            preparedStatement.setString(8, roadOfStationStart);
 
             // Выполняем запрос
             resultSet = preparedStatement.executeQuery();
@@ -93,7 +96,7 @@ public class GetDistanceBetweenStationsImpl extends VaribaleForRestAPI implement
                     //System.out.println("Нет в базе: " + nameOfStationStart + " " + nameOfStationEnd + " " + route);
                     additionalClassForGetRoadOfStations.insertDistanceToDB(nameOfStationStart, roadOfStationStart, nameOfStationEnd, roadOfStationEnd, distance);
                 } catch (IOException e) {
-                    logger.error("Ошибка получения данных с портала: " + result.request().url());
+                    logger.error("Ошибка получения данных с портала: " + result.request().url() + "; Start: " + nameOfStationStart + ": Road: " + roadOfStationStart + "; End: " + nameOfStationEnd + ": Road: " + roadOfStationEnd);
                 }
             }
         return distance;

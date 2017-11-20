@@ -11,5 +11,5 @@ package com.uraltranscom.service;
 */
 
 public interface GetFullMonthCircleOfWagon {
-    void fullDays(String numberOfWagon, String distanceOfEmpty, String distanceOfRoute);
+    void fullDays(String numberOfWagon, Integer distanceOfEmpty, String distanceOfRoute);
 }

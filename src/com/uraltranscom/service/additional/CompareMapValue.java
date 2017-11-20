@@ -1,5 +1,7 @@
 package com.uraltranscom.service.additional;
 
+import com.uraltranscom.model.Route;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,34 +17,35 @@ import java.util.Map;
 */
 
 public class CompareMapValue implements Comparable {
-    public List<String> list;
-    public Integer i;
+    public List<Object> wagon;
+    public Integer distance;
+    public static Route r;
 
-    public CompareMapValue(List<String> list, Integer i) {
-        this.list = list;
-        this.i = i;
+    public CompareMapValue(List<Object> wagon, Integer distance) {
+        this.wagon = wagon;
+        this.distance = distance;
     }
 
     public int compareTo(Object o) {
         if (o instanceof CompareMapValue) {
-            final int diff = i.intValue() - ((CompareMapValue) o).i.intValue();
+            final int diff = distance.intValue() - ((CompareMapValue) o).distance.intValue();
             return diff < 0 ? -1 : (diff > 0 ? 1 : 0);
         } else {
             return 0;
         }
     }
 
-    public static Map sortMap(Map<Integer, List<String>> mapDistanceSort) {
-        Map<Integer, List<String>> sortedMap = new LinkedHashMap<>(mapDistanceSort.size());
+    public static Map sortMap(Map<List<Object>, Integer> mapDistanceSort) {
+        Map<List<Object>, Integer> sortedMap = new LinkedHashMap<>(mapDistanceSort.size());
 
         mapDistanceSort.forEach((k, v) -> {
-            String[] o3 = v.get(0).split(", ");
-            if ("1".equals(o3[2].replace("]", "").trim())) sortedMap.put(k, v);
+            r = (Route) k.get(1);
+            if ("1".equals(r.getVIP())) sortedMap.put(k, v);
         });
 
         mapDistanceSort.forEach((k, v) -> {
-            String[] o3 = v.get(0).split(", ");
-            if ("0".equals(o3[2].replace("]", "").trim())) sortedMap.put(k, v);
+            r = (Route) k.get(1);
+            if ("0".equals(r.getVIP())) sortedMap.put(k, v);
         });
 
         return sortedMap;

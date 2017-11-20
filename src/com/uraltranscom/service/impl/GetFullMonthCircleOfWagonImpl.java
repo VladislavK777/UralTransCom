@@ -27,7 +27,7 @@ public class GetFullMonthCircleOfWagonImpl implements GetFullMonthCircleOfWagon 
     * По вагонам количесво дней суммируется
     */
     @Override
-    public void fullDays(String numberOfWagon, String distanceOfEmpty, String distanceOfRoute) {
+    public void fullDays(String numberOfWagon, Integer distanceOfEmpty, String distanceOfRoute) {
         double fullMonthCircle = 0;
         if (mapOfDaysOfWagon.get(numberOfWagon) == null) {
             fullMonthCircle += Double.valueOf(distanceOfEmpty) / 300 + 1;

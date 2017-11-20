@@ -8,7 +8,6 @@ package com.uraltranscom.model;
 * @version 1.3
 * @create 09.11.2017
 *
-*
 */
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -42,7 +41,7 @@ public class WriteToFileExcel {
     private static String fileName = path.toString();
 
     // Метод записи в файл распределенных маршрутов
-    protected static synchronized void writeToFileExcelDistributedRoutes (String numberOfWagon, Object listOfRoutes, String distance, Double days) {
+    protected static synchronized void writeToFileExcelDistributedRoutes (String numberOfWagon, Route listOfRoutes, Integer distance, Double days) {
         try {
             if (!Files.exists(path)) {
                 Files.createFile(path);
@@ -96,7 +95,7 @@ public class WriteToFileExcel {
     }
 
     // Метод записи в файл нераспределенных маршрутов
-    protected static synchronized void writeToFileExcelUnDistributedRoutes (Map<Integer, List<Object>> unDistributedRoutes) {
+    protected static synchronized void writeToFileExcelUnDistributedRoutes (Map<Integer, Route> unDistributedRoutes) {
         try {
             try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(new File(fileName)))) {
                 XSSFWorkbook xssfWorkbook = new XSSFWorkbook(bufferedInputStream);
@@ -110,8 +109,8 @@ public class WriteToFileExcel {
                 cell.setCellValue("Маршрут");
 
                 // Заполняем данными
-                List<Object> unDistributedList = new ArrayList<>();
-                for (Map.Entry<Integer, List<Object>> unDistributedRoute : unDistributedRoutes.entrySet()) {
+                List<Route> unDistributedList = new ArrayList<>();
+                for (Map.Entry<Integer, Route> unDistributedRoute : unDistributedRoutes.entrySet()) {
                     unDistributedList.add(unDistributedRoute.getValue());
                 }
 
@@ -119,7 +118,7 @@ public class WriteToFileExcel {
                     int rowCount = sheet.getPhysicalNumberOfRows() - 1;
                     row = sheet.createRow(rowCount + 1);
                     cell = row.createCell(0);
-                    cell.setCellValue(String.valueOf(unDistributedList.get(i)));
+                    cell.setCellValue(String.valueOf(unDistributedList.get(i).toString()));
                 }
 
                 try (BufferedOutputStream fio = new BufferedOutputStream(new FileOutputStream(fileName))) {
