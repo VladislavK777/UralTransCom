@@ -131,14 +131,14 @@ public class MethodOfLogicBasic {
                         // Находим маршрут для вагона
                         if (tempMapOfRouteForDelete.get(j).equals(r)) {
                             if (tempMapOfRouteForDelete.get(j).equals(entry.getValue())) {
-                                // Расчет дней затраченных одним вагоном на один цикл
-                                getFullMonthCircleOfWagonImpl.fullDays(numberOfWagon, mapDistanceSortFirstElement.getValue(), r.getDistanceOfWay());
                                 int getKeyNumber = 0;
                                 for (int i = 0; i < tempListOfWagons.size(); i++) {
                                     if (tempListOfWagons.get(i).getNumberOfWagon().equals(numberOfWagon)) {
                                         getKeyNumber = i;
                                     }
                                 }
+                                // Расчет дней затраченных одним вагоном на один цикл
+                                getFullMonthCircleOfWagonImpl.fullDays(numberOfWagon, tempListOfWagons.get(getKeyNumber).getTypeOfWagon(), mapDistanceSortFirstElement.getValue(), r.getDistanceOfWay());
 
                                 // Число дней пройденных вагоном
                                 double numberOfDaysOfWagon = getFullMonthCircleOfWagonImpl.getNumberOfDaysOfWagon(numberOfWagon);
@@ -150,7 +150,7 @@ public class MethodOfLogicBasic {
                                     WriteToFileExcel.writeToFileExcelDistributedRoutes(numberOfWagon, tempMapOfRouteForDelete.get(j), mapDistanceSortFirstElement.getValue(), numberOfDaysOfWagon);
 
                                     // Заменяем маршрут вагону
-                                    tempListOfWagons.set(getKeyNumber, new Wagon(numberOfWagon, tempMapOfRouteForDelete.get(j).getRoadOfStationDestination(), tempMapOfRouteForDelete.get(j).getNameOfStationDestination()));
+                                    tempListOfWagons.set(getKeyNumber, new Wagon(numberOfWagon, tempListOfWagons.get(getKeyNumber).getTypeOfWagon(), tempMapOfRouteForDelete.get(j).getRoadOfStationDestination(), tempMapOfRouteForDelete.get(j).getNameOfStationDestination()));
 
                                     // Добавляем новый вагон в список
                                     listOfDistributedWagons.add(numberOfWagon);

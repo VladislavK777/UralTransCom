@@ -66,6 +66,7 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
                 XSSFRow row = sheet.getRow(4);
 
                 String numberOfWagon = null;
+                String typeOfWagon = null;
                 String roadNameDestination = null;
                 String stationNameDestination = null;
 
@@ -79,6 +80,10 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
                         }
                         numberOfWagon = val;
                     }
+                    if (row.getCell(c).getStringCellValue().equals("Тип вагона")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        typeOfWagon = xssfRow.getCell(c).getStringCellValue();
+                    }
                     if (row.getCell(c).getStringCellValue().equals("Дорога назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         roadNameDestination = xssfRow.getCell(c).getStringCellValue();
@@ -88,7 +93,7 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
                         stationNameDestination = xssfRow.getCell(c).getStringCellValue();
                     }
                 }
-                listOfWagons.add(new Wagon(numberOfWagon, roadNameDestination, stationNameDestination));
+                listOfWagons.add(new Wagon(numberOfWagon, typeOfWagon, roadNameDestination, stationNameDestination));
             }
         } catch (IOException e) {
             logger.error("Ошибка загруки файла");

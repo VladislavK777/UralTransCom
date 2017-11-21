@@ -15,14 +15,18 @@ public class Wagon {
     // Номер вагона
     private String numberOfWagon;
 
+    // Тип вагона
+    private String typeOfWagon;
+
     // Дорога станции назначения
     private String roadNameDestination;
 
     // Станция назначения
     private String stationNameDestination;
 
-    public Wagon(String numberOfWagon, String roadNameDestination, String stationNameDestination) {
+    public Wagon(String numberOfWagon, String typeOfWagon, String roadNameDestination, String stationNameDestination) {
         this.numberOfWagon = numberOfWagon;
+        this.typeOfWagon = typeOfWagon;
         this.roadNameDestination = roadNameDestination;
         this.stationNameDestination = stationNameDestination;
     }
@@ -33,6 +37,14 @@ public class Wagon {
 
     public void setNumberOfWagon(String numberOfWagon) {
         this.numberOfWagon = numberOfWagon;
+    }
+
+    public String getTypeOfWagon() {
+        return typeOfWagon;
+    }
+
+    public void setTypeOfWagon(String typeOfWagon) {
+        this.typeOfWagon = typeOfWagon;
     }
 
     public String getRoadNameDestination() {
@@ -60,6 +72,7 @@ public class Wagon {
 
         if (numberOfWagon != null ? !numberOfWagon.equals(wagon.numberOfWagon) : wagon.numberOfWagon != null)
             return false;
+        if (typeOfWagon != null ? !typeOfWagon.equals(wagon.typeOfWagon) : wagon.typeOfWagon != null) return false;
         if (roadNameDestination != null ? !roadNameDestination.equals(wagon.roadNameDestination) : wagon.roadNameDestination != null)
             return false;
         return stationNameDestination != null ? stationNameDestination.equals(wagon.stationNameDestination) : wagon.stationNameDestination == null;
@@ -68,6 +81,7 @@ public class Wagon {
     @Override
     public int hashCode() {
         int result = numberOfWagon != null ? numberOfWagon.hashCode() : 0;
+        result = 31 * result + (typeOfWagon != null ? typeOfWagon.hashCode() : 0);
         result = 31 * result + (roadNameDestination != null ? roadNameDestination.hashCode() : 0);
         result = 31 * result + (stationNameDestination != null ? stationNameDestination.hashCode() : 0);
         return result;
@@ -75,7 +89,8 @@ public class Wagon {
 
     @Override
     public String toString() {
-        return numberOfWagon +
+        return  numberOfWagon +
+                ", " + typeOfWagon +
                 ", " + roadNameDestination +
                 ", " + stationNameDestination;
     }
