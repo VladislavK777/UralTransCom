@@ -76,6 +76,11 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
                         stringStationAndWagon.append(val);
                         stringStationAndWagon.append(", ");
                     }
+                    if (row.getCell(c).getStringCellValue().equals("Тип вагона")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        stringStationAndWagon.append(xssfRow.getCell(c).getStringCellValue());
+                        stringStationAndWagon.append(", ");
+                    }
                     if (row.getCell(c).getStringCellValue().equals("Дорога назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         stringStationAndWagon.append(xssfRow.getCell(c).getStringCellValue());

@@ -92,11 +92,14 @@ public class MethodOfLogicBasic {
                 // Поулчаем номер вагона
                 String numberOfWagon = valueOfTempMapOfWagons[0].trim();
 
+                // Получаем тип вагона
+                String typeOfWagon = valueOfTempMapOfWagons[1].trim();
+
                 // Получаем ЖД назначения вагона
-                String roadOfWagonEnd = valueOfTempMapOfWagons[1].trim();
+                String roadOfWagonEnd = valueOfTempMapOfWagons[2].trim();
 
                 // Получаем станцию назначения вагона
-                String stationNameEnd = valueOfTempMapOfWagons[2].trim();
+                String stationNameEnd = valueOfTempMapOfWagons[3].trim();
 
                 /*
                 * По каждому вагону высчитываем расстояние до каждой начальной станнции маршрутов
@@ -109,6 +112,7 @@ public class MethodOfLogicBasic {
                     String roadOfStationStart = roadAndNameOfStation[0].trim();
                     String stationNameStart = roadAndNameOfStation[1].replace(" VIP", "").trim();
                     stationAndDistance.add(numberOfWagon);
+                    stationAndDistance.add(typeOfWagon);
                     stationAndDistance.add(roadAndNameOfStation[1]);
                     stationAndDistance.add(roadAndNameOfStation[2]);
                     mapDistance.put(stationAndDistance, Integer.parseInt(getDistanceBetweenStations.getDistanceBetweenStations(stationNameEnd, roadOfWagonEnd, stationNameStart, roadOfStationStart)));
@@ -134,10 +138,7 @@ public class MethodOfLogicBasic {
                 keyNum++;
             }
 
-            //System.out.println(mapDistanceSort);
-
             Map<Integer, List<String>> mapDistanceSortWithPrior = CompareMapValue.sortMap(mapDistanceSort);
-            //System.out.println(mapDistanceSort1);
 
             // Мапа для удаления использованных маршрутов
             Map<Integer, List<Object>> mapOfRoutesForDelete = tempMapOfRoutes;
@@ -158,7 +159,8 @@ public class MethodOfLogicBasic {
                 List<String> listRouteMinDistance = mapDistanceSortFirstElement.getValue();
                 String[] parserRouteMinDistance = listRouteMinDistance.get(0).split(", ");
                 String numberOfWagon = parserRouteMinDistance[0].replace("[", "").trim();
-                String stationStartOfWagon = parserRouteMinDistance[1].replace("]", "").trim();
+                String typeOfWagon = parserRouteMinDistance[1].trim();
+                String stationStartOfWagon = parserRouteMinDistance[2].replace("]", "").trim();
 
                 for (Map.Entry<Integer, List<Object>> tempMapOfRouteForDelete : mapOfRoutesForDelete.entrySet()) {
                     listOfRoutesForDelete.add(tempMapOfRouteForDelete.getValue());
@@ -173,7 +175,7 @@ public class MethodOfLogicBasic {
                         if (startStation[1].trim().equals(stationStartOfWagon)) {
                             if (entry.getValue().equals(listOfRoutesForDelete.get(j))) {
                                 // Расчет дней затраченных одним вагоном на один цикл
-                                getFullMonthCircleOfWagonImpl.fullDays(numberOfWagon, listRouteMinDistance.get(1), startStation[4].replace("]", "").trim());
+                                getFullMonthCircleOfWagonImpl.fullDays(numberOfWagon, typeOfWagon, listRouteMinDistance.get(1), startStation[4].replace("]", "").trim());
                                 int getKeyNumber = 0;
                                 Set<Map.Entry<Integer, String>> entrySet = tempMapOfWagons.entrySet();
                                 for (Map.Entry<Integer, String> pair : entrySet) {
@@ -200,6 +202,8 @@ public class MethodOfLogicBasic {
                                     // Формируем строку для формирования маршрута вагону
                                     stringBuilder.append(numberOfWagon);
                                     stringBuilder.append(", ");
+                                    stringBuilder.append(typeOfWagon);
+                                    stringBuilder.append(", ");
                                     stringBuilder.append(startStation[2].trim());
                                     stringBuilder.append(", ");
                                     stringBuilder.append(startStation[3].replace("]", "").trim());
@@ -212,6 +216,7 @@ public class MethodOfLogicBasic {
 
                                     logger.info("Вагон номер " + numberOfWagon + " едет на станцию " + stationStartOfWagon + ": " + listRouteMinDistance.get(1) + " км.");
                                     logger.info("Общее время в пути: " + numberOfDaysOfWagon);
+                                    logger.info("Маршрут: " + listOfRoutesForDelete.get(j));
                                     logger.info("-------------------------------------------------");
 
                                 } else {
@@ -249,10 +254,6 @@ public class MethodOfLogicBasic {
         WriteToFileExcel.writeToFileExcelUnDistributedRoutes(tempMapOfRoutes);
         WriteToFileExcel.writeToFileExcelUnDistributedWagons(listOfUnDistributedWagons);
     }
-
-    /*public Map<Integer, List<Object>> getTempMapOfRoutes() {
-        return tempMapOfRoutes;
-    }*/
 
     public void setTempMapOfRoutes(Map<Integer, List<Object>> tempMapOfRoutes) {
         this.tempMapOfRoutes = tempMapOfRoutes;

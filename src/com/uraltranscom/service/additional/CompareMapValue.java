@@ -37,12 +37,12 @@ public class CompareMapValue implements Comparable {
 
         mapDistanceSort.forEach((k, v) -> {
             String[] o3 = v.get(0).split(", ");
-            if ("1".equals(o3[2].replace("]", "").trim())) sortedMap.put(k, v);
+            if ("1".equals(o3[3].replace("]", "").trim())) sortedMap.put(k, v);
         });
 
         mapDistanceSort.forEach((k, v) -> {
             String[] o3 = v.get(0).split(", ");
-            if ("0".equals(o3[2].replace("]", "").trim())) sortedMap.put(k, v);
+            if ("0".equals(o3[3].replace("]", "").trim())) sortedMap.put(k, v);
         });
 
         return sortedMap;

@@ -18,7 +18,11 @@ import java.util.Map;
 public class GetFullMonthCircleOfWagonImpl implements GetFullMonthCircleOfWagon {
 
     // Параметры крытых вагонов
-    private final int LOADING_OF_WAGON = 7;
+    // Крытый вагон
+    private final int LOADING_OF_WAGON_KR = 7;
+
+    // Полувагон
+    private final int LOADING_OF_WAGON_PV = 4;
     private final int UNLOADING_OF_WAGON = 4;
     Map<String, Double> mapOfDaysOfWagon = new HashMap<>();
 
@@ -27,11 +31,15 @@ public class GetFullMonthCircleOfWagonImpl implements GetFullMonthCircleOfWagon 
     * По вагонам количесво дней суммируется
     */
     @Override
-    public void fullDays(String numberOfWagon, String distanceOfEmpty, String distanceOfRoute) {
+    public void fullDays(String numberOfWagon, String typeOfWagon, String distanceOfEmpty, String distanceOfRoute) {
         double fullMonthCircle = 0;
         if (mapOfDaysOfWagon.get(numberOfWagon) == null) {
             fullMonthCircle += Double.valueOf(distanceOfEmpty) / 300 + 1;
-            fullMonthCircle += LOADING_OF_WAGON;
+            if (typeOfWagon.equals("КР")) {
+                fullMonthCircle += LOADING_OF_WAGON_KR;
+            } else {
+                fullMonthCircle += LOADING_OF_WAGON_PV;
+            }
             fullMonthCircle += Double.valueOf(distanceOfRoute) / 300 + 1;
             fullMonthCircle += UNLOADING_OF_WAGON;
             mapOfDaysOfWagon.put(numberOfWagon, fullMonthCircle);
@@ -40,7 +48,11 @@ public class GetFullMonthCircleOfWagonImpl implements GetFullMonthCircleOfWagon 
                 if (map.getKey().equals(numberOfWagon)) {
                     double tempDays = map.getValue();
                     tempDays += Double.valueOf(distanceOfEmpty) / 300 + 1;
-                    tempDays += LOADING_OF_WAGON;
+                    if (typeOfWagon.equals("КР")) {
+                        tempDays += LOADING_OF_WAGON_KR;
+                    } else {
+                        tempDays += LOADING_OF_WAGON_PV;
+                    }
                     tempDays += Double.valueOf(distanceOfRoute) / 300 + 1;
                     tempDays += UNLOADING_OF_WAGON;
                     mapOfDaysOfWagon.replace(map.getKey(), tempDays);
