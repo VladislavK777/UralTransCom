@@ -11,7 +11,7 @@ import java.util.Map;
 * Класс сортировки
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 06.11.2017
 *
 */

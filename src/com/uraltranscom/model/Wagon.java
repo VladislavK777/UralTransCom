@@ -5,7 +5,7 @@ package com.uraltranscom.model;
 * Класс Вагон
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 17.11.2017
 *
 */
@@ -18,17 +18,13 @@ public class Wagon {
     // Тип вагона
     private String typeOfWagon;
 
-    // Дорога станции назначения
-    private String roadNameDestination;
+    // Код станции назначения
+    private String keyOfStationDestination;
 
-    // Станция назначения
-    private String stationNameDestination;
-
-    public Wagon(String numberOfWagon, String typeOfWagon, String roadNameDestination, String stationNameDestination) {
+    public Wagon(String numberOfWagon, String typeOfWagon, String keyOfStationDestination) {
         this.numberOfWagon = numberOfWagon;
         this.typeOfWagon = typeOfWagon;
-        this.roadNameDestination = roadNameDestination;
-        this.stationNameDestination = stationNameDestination;
+        this.keyOfStationDestination = keyOfStationDestination;
     }
 
     public String getNumberOfWagon() {
@@ -47,20 +43,12 @@ public class Wagon {
         this.typeOfWagon = typeOfWagon;
     }
 
-    public String getRoadNameDestination() {
-        return roadNameDestination;
+    public String getKeyOfStationDestination() {
+        return keyOfStationDestination;
     }
 
-    public void setRoadNameDestination(String roadNameDestination) {
-        this.roadNameDestination = roadNameDestination;
-    }
-
-    public String getStationNameDestination() {
-        return stationNameDestination;
-    }
-
-    public void setStationNameDestination(String stationNameDestination) {
-        this.stationNameDestination = stationNameDestination;
+    public void setKeyOfStationDestination(String keyOfStationDestination) {
+        this.keyOfStationDestination = keyOfStationDestination;
     }
 
     @Override
@@ -73,17 +61,14 @@ public class Wagon {
         if (numberOfWagon != null ? !numberOfWagon.equals(wagon.numberOfWagon) : wagon.numberOfWagon != null)
             return false;
         if (typeOfWagon != null ? !typeOfWagon.equals(wagon.typeOfWagon) : wagon.typeOfWagon != null) return false;
-        if (roadNameDestination != null ? !roadNameDestination.equals(wagon.roadNameDestination) : wagon.roadNameDestination != null)
-            return false;
-        return stationNameDestination != null ? stationNameDestination.equals(wagon.stationNameDestination) : wagon.stationNameDestination == null;
+        return keyOfStationDestination != null ? keyOfStationDestination.equals(wagon.keyOfStationDestination) : wagon.keyOfStationDestination == null;
     }
 
     @Override
     public int hashCode() {
         int result = numberOfWagon != null ? numberOfWagon.hashCode() : 0;
         result = 31 * result + (typeOfWagon != null ? typeOfWagon.hashCode() : 0);
-        result = 31 * result + (roadNameDestination != null ? roadNameDestination.hashCode() : 0);
-        result = 31 * result + (stationNameDestination != null ? stationNameDestination.hashCode() : 0);
+        result = 31 * result + (keyOfStationDestination != null ? keyOfStationDestination.hashCode() : 0);
         return result;
     }
 
@@ -91,7 +76,6 @@ public class Wagon {
     public String toString() {
         return  numberOfWagon +
                 ", " + typeOfWagon +
-                ", " + roadNameDestination +
-                ", " + stationNameDestination;
+                ", " + keyOfStationDestination;
     }
 }

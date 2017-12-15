@@ -2,10 +2,10 @@ package com.uraltranscom.model;
 
 /*
 *
-* класс записи в файл Excel
+* Класс записи в файл Excel
 *
 * @author Vladislav Klochkov
-* @version 1.3
+* @version 2.0
 * @create 09.11.2017
 *
 */

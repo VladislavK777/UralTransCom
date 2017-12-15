@@ -5,7 +5,7 @@ package com.uraltranscom.service;
 * Интерфейс получения списка маршрутов
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 25.10.2017
 *
 */

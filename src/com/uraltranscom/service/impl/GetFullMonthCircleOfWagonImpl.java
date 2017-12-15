@@ -10,7 +10,7 @@ import java.util.Map;
 * Класс расчета количества дней, затраченных вагоном за один цикл. По вагонам количесво дней суммируется
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 08.11.2017
 *
 */

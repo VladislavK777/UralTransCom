@@ -14,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
 * Класс соединения с ZooKeeper
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 13.11.2017
 *
 */

@@ -15,7 +15,7 @@ import java.util.*;
 * Основной класс алгоритма расчета
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 01.11.2017
 *
 * 06.11.2017
@@ -71,21 +71,17 @@ public class MethodOfLogicBasic {
                 // Поулчаем номер вагона
                 String numberOfWagon = tempListOfWagons.get(i).getNumberOfWagon().trim();
 
-                // Получаем ЖД назначения вагона
-                String roadOfWagonDestination = tempListOfWagons.get(i).getRoadNameDestination().trim();
-
-                // Получаем станцию назначения вагона
-                String stationOfWagonDestination = tempListOfWagons.get(i).getStationNameDestination().trim();
+                // Получаем код станции назначения вагона
+                String keyOfStationOfWagonDestination = tempListOfWagons.get(i).getKeyOfStationDestination().trim();
 
                 // По каждому вагону высчитываем расстояние до каждой начальной станнции маршрутов
                 // Цикл расчета расстояния и заполнения мапы
                 for (Map.Entry<Integer, Route> tempMapOfRoute : tempMapOfRoutes.entrySet()) {
                     List<Object> list = new ArrayList<>();
-                    String roadOfStationDeparture = tempMapOfRoute.getValue().getRoadOfStationDeparture();
-                    String nameOfStationDeparture = tempMapOfRoute.getValue().getNameOfStationDeparture();
+                    String keyOfStationDeparture = tempMapOfRoute.getValue().getKeyOfStationDeparture();
                     list.add(numberOfWagon);
                     list.add(tempMapOfRoute.getValue());
-                    mapDistance.put(list, Integer.parseInt(getDistanceBetweenStations.getDistanceBetweenStations(stationOfWagonDestination, roadOfWagonDestination, nameOfStationDeparture, roadOfStationDeparture)));
+                    mapDistance.put(list, getDistanceBetweenStations.getDistanceBetweenStations(keyOfStationOfWagonDestination, keyOfStationDeparture));
                 }
             }
             // Отсортированный список расстояний
@@ -103,7 +99,7 @@ public class MethodOfLogicBasic {
                 mapDistanceSort.put(cmv.wagon, cmv.distance);
             }
 
-            Map<List<Object>, Integer> mapDistanceSortWithPrior = CompareMapValue.sortMap(mapDistanceSort);
+            Map<List<Object>, Integer> mapDistanceSortWithPriority = CompareMapValue.sortMap(mapDistanceSort);
 
             // Мапа для удаления использованных маршрутов
             Map<Integer, Route> mapOfRoutesForDelete = tempMapOfRoutes;
@@ -111,12 +107,12 @@ public class MethodOfLogicBasic {
             // Цикл формирования рейсов
             // Проверяем на пустоту мап, либо вагоны, либо рейсы
             outer:
-            if (!mapDistanceSortWithPrior.isEmpty() && !tempListOfWagons.isEmpty()) {
-                Map.Entry<List<Object>, Integer> mapDistanceSortFirstElement = mapDistanceSortWithPrior.entrySet().iterator().next();
+            if (!mapDistanceSortWithPriority.isEmpty() && !tempListOfWagons.isEmpty()) {
+                Map.Entry<List<Object>, Integer> mapDistanceSortFirstElement = mapDistanceSortWithPriority.entrySet().iterator().next();
                 List<Object> listRouteMinDistance = mapDistanceSortFirstElement.getKey();
                 Route r = (Route) listRouteMinDistance.get(1);
                 String numberOfWagon = (String) listRouteMinDistance.get(0);
-                String stationDepartureOfWagon = r.getNameOfStationDeparture();
+                String nameOfStationDepartureOfWagon = r.getNameOfStationDeparture();
 
                 final int[] o = {0};
                 Map<Integer, Route> tempMapOfRouteForDelete = new HashMap<>();
@@ -150,12 +146,12 @@ public class MethodOfLogicBasic {
                                     WriteToFileExcel.writeToFileExcelDistributedRoutes(numberOfWagon, tempMapOfRouteForDelete.get(j), mapDistanceSortFirstElement.getValue(), numberOfDaysOfWagon);
 
                                     // Заменяем маршрут вагону
-                                    tempListOfWagons.set(getKeyNumber, new Wagon(numberOfWagon, tempListOfWagons.get(getKeyNumber).getTypeOfWagon(), tempMapOfRouteForDelete.get(j).getRoadOfStationDestination(), tempMapOfRouteForDelete.get(j).getNameOfStationDestination()));
+                                    tempListOfWagons.set(getKeyNumber, new Wagon(numberOfWagon, tempListOfWagons.get(getKeyNumber).getTypeOfWagon(), tempMapOfRouteForDelete.get(j).getKeyOfStationDestination()));
 
                                     // Добавляем новый вагон в список
                                     listOfDistributedWagons.add(numberOfWagon);
 
-                                    logger.info("Вагон номер " + numberOfWagon + " едет на станцию " + stationDepartureOfWagon + ": " + mapDistanceSortFirstElement.getValue() + " км.");
+                                    logger.info("Вагон номер " + numberOfWagon + " едет на станцию " + nameOfStationDepartureOfWagon + ": " + mapDistanceSortFirstElement.getValue() + " км.");
                                     logger.info("Общее время в пути: " + numberOfDaysOfWagon);
                                     logger.info("Маршрут: " + tempMapOfRouteForDelete.get(j).toString());
                                     logger.info("-------------------------------------------------");
@@ -166,7 +162,7 @@ public class MethodOfLogicBasic {
                                     // Выходим из цикла, так как с ним больше ничего не сделать
                                     break outer;
                                 } else {
-                                    logger.info("Вагон номер " + numberOfWagon + " должен был ехать на " + stationDepartureOfWagon + ": " + mapDistanceSortFirstElement.getValue() + " км.");
+                                    logger.info("Вагон номер " + numberOfWagon + " должен был ехать на " + nameOfStationDepartureOfWagon + ": " + mapDistanceSortFirstElement.getValue() + " км.");
                                     logger.info("Далее по маршруту: " + tempMapOfRouteForDelete.get(j).toString());
                                     logger.info("-------------------------------------------------");
 

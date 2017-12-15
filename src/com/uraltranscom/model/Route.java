@@ -5,21 +5,21 @@ package com.uraltranscom.model;
 * Класс Маршрута
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 17.11.2017
 *
 */
 
 public class Route implements Comparable<Object> {
 
-    // Дорога станции отправления
-    private String roadOfStationDeparture;
+    // Код станции отправления
+    private String keyOfStationDeparture;
 
     // Станция отправления
     private String nameOfStationDeparture;
 
-    // Дорога станции назначения
-    private String roadOfStationDestination;
+    // Код станции назначения
+    private String keyOfStationDestination;
 
     // Станция назначения
     private String nameOfStationDestination;
@@ -30,21 +30,21 @@ public class Route implements Comparable<Object> {
     // Флаг приоритера 1 - Приоритетный, 0 - Неприоритетный
     private String VIP;
 
-    public Route(String roadOfStationDeparture, String nameOfStationDeparture, String roadOfStationDestination, String nameOfStationDestination, String distanceOfWay, String VIP) {
-        this.roadOfStationDeparture = roadOfStationDeparture;
+    public Route(String keyOfStationDeparture, String nameOfStationDeparture, String keyOfStationDestination, String nameOfStationDestination, String distanceOfWay, String VIP) {
+        this.keyOfStationDeparture = keyOfStationDeparture;
         this.nameOfStationDeparture = nameOfStationDeparture;
-        this.roadOfStationDestination = roadOfStationDestination;
+        this.keyOfStationDestination = keyOfStationDestination;
         this.nameOfStationDestination = nameOfStationDestination;
         this.distanceOfWay = distanceOfWay;
         this.VIP = VIP;
     }
 
-    public String getRoadOfStationDeparture() {
-        return roadOfStationDeparture;
+    public String getKeyOfStationDeparture() {
+        return keyOfStationDeparture;
     }
 
-    public void setRoadOfStationDeparture(String roadOfStationDeparture) {
-        this.roadOfStationDeparture = roadOfStationDeparture;
+    public void setKeyOfStationDeparture(String keyOfStationDeparture) {
+        this.keyOfStationDeparture = keyOfStationDeparture;
     }
 
     public String getNameOfStationDeparture() {
@@ -55,12 +55,12 @@ public class Route implements Comparable<Object> {
         this.nameOfStationDeparture = nameOfStationDeparture;
     }
 
-    public String getRoadOfStationDestination() {
-        return roadOfStationDestination;
+    public String getKeyOfStationDestination() {
+        return keyOfStationDestination;
     }
 
-    public void setRoadOfStationDestination(String roadOfStationDestination) {
-        this.roadOfStationDestination = roadOfStationDestination;
+    public void setKeyOfStationDestination(String keyOfStationDestination) {
+        this.keyOfStationDestination = keyOfStationDestination;
     }
 
     public String getNameOfStationDestination() {
@@ -94,11 +94,11 @@ public class Route implements Comparable<Object> {
 
         Route route = (Route) o;
 
-        if (roadOfStationDeparture != null ? !roadOfStationDeparture.equals(route.roadOfStationDeparture) : route.roadOfStationDeparture != null)
+        if (keyOfStationDeparture != null ? !keyOfStationDeparture.equals(route.keyOfStationDeparture) : route.keyOfStationDeparture != null)
             return false;
         if (nameOfStationDeparture != null ? !nameOfStationDeparture.equals(route.nameOfStationDeparture) : route.nameOfStationDeparture != null)
             return false;
-        if (roadOfStationDestination != null ? !roadOfStationDestination.equals(route.roadOfStationDestination) : route.roadOfStationDestination != null)
+        if (keyOfStationDestination != null ? !keyOfStationDestination.equals(route.keyOfStationDestination) : route.keyOfStationDestination != null)
             return false;
         if (nameOfStationDestination != null ? !nameOfStationDestination.equals(route.nameOfStationDestination) : route.nameOfStationDestination != null)
             return false;
@@ -109,9 +109,9 @@ public class Route implements Comparable<Object> {
 
     @Override
     public int hashCode() {
-        int result = roadOfStationDeparture != null ? roadOfStationDeparture.hashCode() : 0;
+        int result = keyOfStationDeparture != null ? keyOfStationDeparture.hashCode() : 0;
         result = 31 * result + (nameOfStationDeparture != null ? nameOfStationDeparture.hashCode() : 0);
-        result = 31 * result + (roadOfStationDestination != null ? roadOfStationDestination.hashCode() : 0);
+        result = 31 * result + (keyOfStationDestination != null ? keyOfStationDestination.hashCode() : 0);
         result = 31 * result + (nameOfStationDestination != null ? nameOfStationDestination.hashCode() : 0);
         result = 31 * result + (distanceOfWay != null ? distanceOfWay.hashCode() : 0);
         result = 31 * result + (VIP != null ? VIP.hashCode() : 0);
@@ -120,9 +120,9 @@ public class Route implements Comparable<Object> {
 
     @Override
     public String toString() {
-        return  roadOfStationDeparture +
+        return  keyOfStationDeparture +
                 ", " + nameOfStationDeparture +
-                ", " + roadOfStationDestination +
+                ", " + keyOfStationDestination +
                 ", " + nameOfStationDestination +
                 ", " + distanceOfWay +
                 ", " + VIP;

@@ -20,7 +20,7 @@ import java.util.List;
 * Класс получения списка вагонов
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 25.10.2017
 *
 * 06.11.2017
@@ -67,8 +67,7 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
 
                 String numberOfWagon = null;
                 String typeOfWagon = null;
-                String roadNameDestination = null;
-                String stationNameDestination = null;
+                String keyOfStationDestination = null;
 
                 for (int c = 0; c < row.getLastCellNum(); c++) {
                     if (row.getCell(c).getStringCellValue().equals("Вагон №")) {
@@ -84,16 +83,12 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
                         XSSFRow xssfRow = sheet.getRow(j);
                         typeOfWagon = xssfRow.getCell(c).getStringCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().equals("Дорога назначения")) {
+                    if (row.getCell(c).getStringCellValue().equals("Код станции назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
-                        roadNameDestination = xssfRow.getCell(c).getStringCellValue();
-                    }
-                    if (row.getCell(c).getStringCellValue().equals("Станция назначения")) {
-                        XSSFRow xssfRow = sheet.getRow(j);
-                        stationNameDestination = xssfRow.getCell(c).getStringCellValue();
+                        keyOfStationDestination = xssfRow.getCell(c).getStringCellValue();
                     }
                 }
-                listOfWagons.add(new Wagon(numberOfWagon, typeOfWagon, roadNameDestination, stationNameDestination));
+                listOfWagons.add(new Wagon(numberOfWagon, typeOfWagon, keyOfStationDestination));
             }
         } catch (IOException e) {
             logger.error("Ошибка загруки файла");

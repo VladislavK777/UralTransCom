@@ -5,7 +5,7 @@ package com.uraltranscom.dao;
 * Класс соединения с БД
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 25.10.2017
 *
 * 13.11.2017
@@ -21,9 +21,13 @@ public class ConnectionToDBMySQL {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(ConnectionToDBMySQL.class);
 
-    private static final String URL = "jdbc:mysql://localhost:3306/restapi?autoReconnect=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private static final String USER = "root";
+    private static final String URL = "jdbc:postgresql://localhost:5432/restapi";
+    private static final String USER = "postgres";
     private static final String PASS = "root";
+
+    /*private static final String URL = "jdbc:mysql://localhost:3306/restapi?autoReconnect=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASS = "root";*/
 
     /*private static ZooKeeper zk;
     private static ZkConnector zkc = new ZkConnector();

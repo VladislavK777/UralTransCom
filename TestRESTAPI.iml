@@ -23,5 +23,6 @@
     <orderEntry type="library" name="slf4j-api-1.7.25" level="application" />
     <orderEntry type="library" name="slf4j-simple-1.7.25" level="application" />
     <orderEntry type="library" name="org.apache.zookeeper:zookeeper:3.4.10" level="application" />
+    <orderEntry type="library" name="postgresql-9.4.1208-jdbc42-atlassian-hosted" level="application" />
   </component>
 </module>

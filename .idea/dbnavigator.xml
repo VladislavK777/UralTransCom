@@ -24,15 +24,16 @@
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
     <loaded-nodes>
-      <connection connection-id="8043536a-c704-4529-87c7-b553fd16f5d8">
-        <schema name="mysql" object-types="table, view" />
-        <schema name="restapi" object-types="table, view" />
+      <connection connection-id="85761305-79f4-4a5b-9849-5d16cf93077f">
+        <schema name="information_schema" object-types="function" />
+        <schema name="pg_catalog" object-types="function" />
+        <schema name="public" object-types="function, table, view" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="8043536a-c704-4529-87c7-b553fd16f5d8">
-      <console name="RestAPI" type="STANDARD"><![CDATA[select * from restapi.stations]]></console>
+    <connection id="85761305-79f4-4a5b-9849-5d16cf93077f">
+      <console name="Connection" type="STANDARD"><![CDATA[select dist('547112','546831');]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
@@ -58,23 +59,23 @@
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="8043536a-c704-4529-87c7-b553fd16f5d8" active="true">
+      <connection id="85761305-79f4-4a5b-9849-5d16cf93077f" active="true">
         <database>
-          <name value="RestAPI" />
+          <name value="Connection" />
           <description value="" />
-          <database-type value="MYSQL" />
+          <database-type value="POSTGRES" />
           <config-type value="BASIC" />
-          <database-version value="5.5" />
+          <database-version value="9.5" />
           <driver-source value="BUILTIN" />
           <driver-library value="" />
           <driver value="" />
           <url-type value="DATABASE" />
           <host value="localhost" />
-          <port value="3306" />
-          <database value="mysql" />
+          <port value="5432" />
+          <database value="restapi" />
           <os-authentication value="false" />
           <empty-password value="false" />
-          <user value="root" />
+          <user value="postgres" />
           <password value="cm9vdA==" />
         </database>
         <properties>
@@ -449,7 +450,7 @@
         <debug-execution-timeout value="600" />
         <focus-result value="false" />
         <prompt-execution value="false" />
-        <target-connection value="ASK" />
+        <target-connection value="MAIN" />
       </statement-execution>
       <script-execution>
         <command-line-interfaces />

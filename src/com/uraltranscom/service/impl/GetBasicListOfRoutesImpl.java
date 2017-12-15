@@ -62,25 +62,25 @@ public class GetBasicListOfRoutesImpl implements GetBasicListOfRoutes {
             for (int j = 1; j < sheet.getLastRowNum() + 1; j++) {
                 XSSFRow row = sheet.getRow(0);
 
-                String roadOfStationDeparture = null;
+                String keyOfStationDeparture = null;
                 String nameOfStationDeparture = null;
-                String roadOfStationDestination = null;
+                String keyOfStationDestination = null;
                 String nameOfStationDestination = null;
                 String distanceOfWay = null;
                 String VIP = null;
 
                 for (int c = 0; c < row.getLastCellNum(); c++) {
-                    if (row.getCell(c).getStringCellValue().equals("Дорога отправления")) {
+                    if (row.getCell(c).getStringCellValue().equals("Код станции отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);
-                        roadOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
+                        keyOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
                     }
                     if (row.getCell(c).getStringCellValue().equals("Станция отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         nameOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().equals("Дорога назначения")) {
+                    if (row.getCell(c).getStringCellValue().equals("Код станции назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
-                        roadOfStationDestination = xssfRow.getCell(c).getStringCellValue();
+                        keyOfStationDestination = xssfRow.getCell(c).getStringCellValue();
                     }
                     if (row.getCell(c).getStringCellValue().equals("Станция назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
@@ -105,7 +105,7 @@ public class GetBasicListOfRoutesImpl implements GetBasicListOfRoutes {
                         }
                     }
                 }
-                mapOfRoutes.put(i, new Route(roadOfStationDeparture, nameOfStationDeparture, roadOfStationDestination, nameOfStationDestination, distanceOfWay, VIP));
+                mapOfRoutes.put(i, new Route(keyOfStationDeparture, nameOfStationDeparture, keyOfStationDestination, nameOfStationDestination, distanceOfWay, VIP));
                 i++;
             }
         } catch (IOException e) {

@@ -4,7 +4,7 @@ package com.uraltranscom.service;
 * Интерфейс получения расстояния между станциями
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 25.10.2017
 *
 * 06.11.2017
@@ -13,6 +13,6 @@ package com.uraltranscom.service;
 */
 
 public interface GetDistanceBetweenStations {
-    String getDistanceBetweenStations(String nameOfStationStart, String roadOfStationStart, String nameOfStationEnd, String roadOfStationEnd);
+    int getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination);
 
 }
