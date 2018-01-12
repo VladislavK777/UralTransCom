@@ -21,10 +21,14 @@ public class Wagon {
     // Код станции назначения
     private String keyOfStationDestination;
 
-    public Wagon(String numberOfWagon, String typeOfWagon, String keyOfStationDestination) {
+    // Название станции назначения
+    private String nameOfStationDestination;
+
+    public Wagon(String numberOfWagon, String typeOfWagon, String keyOfStationDestination, String nameOfStationDestination) {
         this.numberOfWagon = numberOfWagon;
         this.typeOfWagon = typeOfWagon;
         this.keyOfStationDestination = keyOfStationDestination;
+        this.nameOfStationDestination = nameOfStationDestination;
     }
 
     public String getNumberOfWagon() {
@@ -51,6 +55,14 @@ public class Wagon {
         this.keyOfStationDestination = keyOfStationDestination;
     }
 
+    public String getNameOfStationDestination() {
+        return nameOfStationDestination;
+    }
+
+    public void setNameOfStationDestination(String nameOfStationDestination) {
+        this.nameOfStationDestination = nameOfStationDestination;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,7 +73,9 @@ public class Wagon {
         if (numberOfWagon != null ? !numberOfWagon.equals(wagon.numberOfWagon) : wagon.numberOfWagon != null)
             return false;
         if (typeOfWagon != null ? !typeOfWagon.equals(wagon.typeOfWagon) : wagon.typeOfWagon != null) return false;
-        return keyOfStationDestination != null ? keyOfStationDestination.equals(wagon.keyOfStationDestination) : wagon.keyOfStationDestination == null;
+        if (keyOfStationDestination != null ? !keyOfStationDestination.equals(wagon.keyOfStationDestination) : wagon.keyOfStationDestination != null)
+            return false;
+        return nameOfStationDestination != null ? nameOfStationDestination.equals(wagon.nameOfStationDestination) : wagon.nameOfStationDestination == null;
     }
 
     @Override
@@ -69,6 +83,7 @@ public class Wagon {
         int result = numberOfWagon != null ? numberOfWagon.hashCode() : 0;
         result = 31 * result + (typeOfWagon != null ? typeOfWagon.hashCode() : 0);
         result = 31 * result + (keyOfStationDestination != null ? keyOfStationDestination.hashCode() : 0);
+        result = 31 * result + (nameOfStationDestination != null ? nameOfStationDestination.hashCode() : 0);
         return result;
     }
 
@@ -76,6 +91,7 @@ public class Wagon {
     public String toString() {
         return  numberOfWagon +
                 ", " + typeOfWagon +
-                ", " + keyOfStationDestination;
+                ", " + keyOfStationDestination +
+                ", " + nameOfStationDestination;
     }
 }

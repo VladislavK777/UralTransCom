@@ -68,6 +68,7 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
                 String numberOfWagon = null;
                 String typeOfWagon = null;
                 String keyOfStationDestination = null;
+                String nameOfStationDestination = null;
 
                 for (int c = 0; c < row.getLastCellNum(); c++) {
                     if (row.getCell(c).getStringCellValue().equals("Вагон №")) {
@@ -83,12 +84,16 @@ public class GetListOfWagonsImpl implements GetListOfWagons {
                         XSSFRow xssfRow = sheet.getRow(j);
                         typeOfWagon = xssfRow.getCell(c).getStringCellValue();
                     }
+                    if (row.getCell(c).getStringCellValue().equals("Станция назначения")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        nameOfStationDestination = xssfRow.getCell(c).getStringCellValue();
+                    }
                     if (row.getCell(c).getStringCellValue().equals("Код станции назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         keyOfStationDestination = xssfRow.getCell(c).getStringCellValue();
                     }
                 }
-                listOfWagons.add(new Wagon(numberOfWagon, typeOfWagon, keyOfStationDestination));
+                listOfWagons.add(new Wagon(numberOfWagon, typeOfWagon, keyOfStationDestination, nameOfStationDestination));
             }
         } catch (IOException e) {
             logger.error("Ошибка загруки файла");

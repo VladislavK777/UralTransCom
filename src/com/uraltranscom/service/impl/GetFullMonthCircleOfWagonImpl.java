@@ -17,13 +17,16 @@ import java.util.Map;
 
 public class GetFullMonthCircleOfWagonImpl implements GetFullMonthCircleOfWagon {
 
-    // Параметры крытых вагонов
+    // Параметры загрузки вагонов
     // Крытый вагон
     private final int LOADING_OF_WAGON_KR = 7;
 
     // Полувагон
     private final int LOADING_OF_WAGON_PV = 4;
+
+    // Выгрузка вагонов
     private final int UNLOADING_OF_WAGON = 4;
+
     Map<String, Double> mapOfDaysOfWagon = new HashMap<>();
 
     /*

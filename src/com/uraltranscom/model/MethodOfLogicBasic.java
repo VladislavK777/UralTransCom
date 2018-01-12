@@ -1,10 +1,7 @@
 package com.uraltranscom.model;
 
 import com.uraltranscom.service.additional.CompareMapValue;
-import com.uraltranscom.service.impl.GetBasicListOfRoutesImpl;
-import com.uraltranscom.service.impl.GetDistanceBetweenStationsImpl;
-import com.uraltranscom.service.impl.GetFullMonthCircleOfWagonImpl;
-import com.uraltranscom.service.impl.GetListOfWagonsImpl;
+import com.uraltranscom.service.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,16 +15,8 @@ import java.util.*;
 * @version 2.0
 * @create 01.11.2017
 *
-* 06.11.2017
-*   1. Переработана логина с использованием названия ЖД
-* 07.11.2017
- *  1. Переработан цикл для формирования маршрута некратного значения маршруты/вагоны
-* 08.11.2017
-*   1. Добавлена логика расчета по дням, лимит 30 дней
-* 16.11.2017
-*   1.Добалена сортировка по приоритеам станций
-* 17.11.2017
-*   1.Изменение типов Map
+* 12.01.2018
+* Версия 2.0
 *
 */
 
@@ -40,6 +29,7 @@ public class MethodOfLogicBasic {
     private GetDistanceBetweenStationsImpl getDistanceBetweenStations = new GetDistanceBetweenStationsImpl();
     private GetListOfWagonsImpl getListOfWagonsImpl = new GetListOfWagonsImpl();
     private GetFullMonthCircleOfWagonImpl getFullMonthCircleOfWagonImpl = new GetFullMonthCircleOfWagonImpl();
+    private CheckExistKeyOfStation checkExistKeyOfStation = new CheckExistKeyOfStation();
 
     private Map<Integer, Route> tempMapOfRoutes = new HashMap<>();
     private List<Wagon> tempListOfWagons = new ArrayList<>();
@@ -81,7 +71,26 @@ public class MethodOfLogicBasic {
                     String keyOfStationDeparture = tempMapOfRoute.getValue().getKeyOfStationDeparture();
                     list.add(numberOfWagon);
                     list.add(tempMapOfRoute.getValue());
-                    mapDistance.put(list, getDistanceBetweenStations.getDistanceBetweenStations(keyOfStationOfWagonDestination, keyOfStationDeparture));
+                    int distance = getDistanceBetweenStations.getDistanceBetweenStations(keyOfStationOfWagonDestination, keyOfStationDeparture);
+                    if (distance != -1) {
+                        mapDistance.put(list, distance);
+                    } else {
+                        if (checkExistKeyOfStation.checkExistKey(keyOfStationOfWagonDestination)) {
+                            if (checkExistKeyOfStation.checkExistKey(keyOfStationDeparture)) {
+                                System.out.println("check distance from " + keyOfStationOfWagonDestination + " to " + keyOfStationDeparture);
+                                break;
+                            } else {
+                                System.out.println("Проверьте код станции " + keyOfStationDeparture + " - " + tempMapOfRoute.getValue().getNameOfStationDeparture() + " на марщруте: " + tempMapOfRoute.getValue().toString());
+                                tempMapOfRoutes.remove(tempMapOfRoute.getKey());
+                                break;
+                            }
+                        } else {
+                            System.out.println("Проверьте код станции назначения " + keyOfStationOfWagonDestination + " - " + tempListOfWagons.get(i).getNameOfStationDestination() + " у вагона " + tempListOfWagons.get(i).toString());
+                            tempListOfWagons.remove(i);
+                            countWagons = tempListOfWagons.size();
+                            break;
+                        }
+                    }
                 }
             }
             // Отсортированный список расстояний
@@ -146,7 +155,7 @@ public class MethodOfLogicBasic {
                                     WriteToFileExcel.writeToFileExcelDistributedRoutes(numberOfWagon, tempMapOfRouteForDelete.get(j), mapDistanceSortFirstElement.getValue(), numberOfDaysOfWagon);
 
                                     // Заменяем маршрут вагону
-                                    tempListOfWagons.set(getKeyNumber, new Wagon(numberOfWagon, tempListOfWagons.get(getKeyNumber).getTypeOfWagon(), tempMapOfRouteForDelete.get(j).getKeyOfStationDestination()));
+                                    tempListOfWagons.set(getKeyNumber, new Wagon(numberOfWagon, tempListOfWagons.get(getKeyNumber).getTypeOfWagon(), tempMapOfRouteForDelete.get(j).getKeyOfStationDestination(), tempMapOfRouteForDelete.get(j).getNameOfStationDestination()));
 
                                     // Добавляем новый вагон в список
                                     listOfDistributedWagons.add(numberOfWagon);
@@ -163,6 +172,7 @@ public class MethodOfLogicBasic {
                                     break outer;
                                 } else {
                                     logger.info("Вагон номер " + numberOfWagon + " должен был ехать на " + nameOfStationDepartureOfWagon + ": " + mapDistanceSortFirstElement.getValue() + " км.");
+                                    logger.info("Общее время в пути: " + numberOfDaysOfWagon);
                                     logger.info("Далее по маршруту: " + tempMapOfRouteForDelete.get(j).toString());
                                     logger.info("-------------------------------------------------");
 
@@ -170,7 +180,7 @@ public class MethodOfLogicBasic {
                                         listOfUnDistributedWagons.add(numberOfWagon);
                                     }
 
-                                    // Удаляем вагон и начинаем снова перерасчет
+                                    // Удаляем вагон
                                     tempListOfWagons.remove(getKeyNumber);
 
                                     // Выходим из цикла, так как с ним больше ничего не сделать

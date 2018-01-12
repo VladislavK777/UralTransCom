@@ -20,7 +20,7 @@ import java.util.Map;
 * Класс получения списка маршрутов
 *
 * @author Vladislav Klochkov
-* @version 1.0
+* @version 2.0
 * @create 25.10.2017
 *
 * 17.11.2017
